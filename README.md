@@ -37,6 +37,14 @@ The following open source packages are used.
 
 * Update to the latest versions of ILEvator and noxDB
 
+Before building the project you need to update a couple of source files with 
+the correct IP address and port for your IBM i server.
+
+* Update the IP address and port number in the `BASE_URL` constant in source
+file `/prj/rmaliens/cloud_mssql/src/person_d.rpgleinc`
+* Update the IP address and port number in the `HTTP_GET` statement in source
+file `/prj/rmaliens/cloud_mssql/sql/mssql_demo.sql`
+
 
 
 # Your IBM i
@@ -173,7 +181,7 @@ It's important that the Google Sheet is called `Persons` and it should contain a
 worksheet called `Characters`.
 
 
-## Installation
+## Build the RMALIENS Library
 
 First, clone the `rmaliens` repository on your IBM i server.
 
@@ -186,20 +194,14 @@ git clone https://github.com/richardm90/rmaliens.git
 
 The repository has now been installed to the IFS in directory `/prj/rmaliens`.
 
-Before building the project you need to update a couple of source files with 
-the correct IP address and port for your IBM i server.
-
-* Update the IP address and port number in the `BASE_URL` constant in source
-file `/prj/rmaliens/cloud_mssql/src/person_d.rpgleinc`
-* Update the IP address and port number in the `HTTP_GET` statement in source
-file `/prj/rmaliens/cloud_mssql/sql/mssql_demo.sql`
-
 Now, let's build the project.
 
 ```shell
 cd /prj/rmaliens
 gmake
 ```
+
+## Install Node.js Packages
 
 Install Node.js packages on the web server.
 
@@ -221,10 +223,25 @@ CHGJOBD JOBD(RMALIENS) INLLIBL(RMALIENS ILEVATOR NOXDB QGPL QTEMP)
 
 Create the environment variable configuration files.
 
+The first file you need to create defines the MS SQL server configuration, I
+am showing two sample configurations here. One for Azure and one for AWS.
+
 ```shell
+# Azure sample configuration
 # /prj/rmaliens/cloud_mssql/apis/.env.development
 PORT=3101
 DB_SERVER="rmaliens.database.windows.net"
+DB_DATABASE="rmaliens"
+DB_PORT=1433
+DB_USER="<mssql_user>"
+DB_PASSWORD="<mssql_password>"
+```
+
+```shell
+# AWS sample configuration
+# /prj/rmaliens/cloud_mssql/apis/.env.development
+PORT=3101
+DB_SERVER="rmaliens.<aws_db_id>.eu-west-2.rds.amazonaws.com"
 DB_DATABASE="rmaliens"
 DB_PORT=1433
 DB_USER="<mssql_user>"
@@ -237,7 +254,7 @@ Using the [Google Authentication](#google-authentication) details created above.
 # /prj/rmaliens/google_sheets/apis/.env.development
 PORT=3102
 GOOGLE_DOC_ID="<google_doc_id>"
-GOOGLE_SHEET_TITLE="ModernFamily"
+GOOGLE_SHEET_TITLE="Characters"
 GOOGLE_SERVICE_ACCOUNT_EMAIL="<google_service_account_email>"
 GOOGLE_PRIVATE_KEY="<google_priveate_key>"
 ```
