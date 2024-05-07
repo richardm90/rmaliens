@@ -1,0 +1,17 @@
+**free
+
+dcl-pr PERGETALL extpgm('PERGETALL');
+  result varchar(IV_BUFFER_SIZE:4) ccsid(1208) options(*nopass);
+end-pr;
+
+dcl-pr PERCRT extpgm('PERCRT');
+  firstName varchar(255) ccsid(1208) const;
+  lastName varchar(255) ccsid(1208) const;
+  result varchar(IV_BUFFER_SIZE:4) ccsid(1208) options(*nopass);
+end-pr;
+
+dcl-ds PERSON_t qualified template inz;
+    id int(10) inz(0);
+    firstName varchar(255) ccsid(1208) inz('');
+    lastName varchar(255) ccsid(1208) inz('');
+end-ds;

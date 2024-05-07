@@ -1,0 +1,110 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: AWS S3 Bucket API
+paths:
+  /buckets:
+    get:
+      summary: Get all buckets
+      tags:
+      - buckets
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Bucket'
+  /objects:
+    parameters:
+      - name: bucket
+        in: query
+        required: true
+        schema:
+          type: string
+    get:
+      summary: Get a list of objects
+      tags:
+      - objects
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Object'
+        '404':
+          description: Objects not found
+      parameters:
+        - name: prefix
+          in: query
+          required: false
+          schema:
+            type: string
+    post:
+      summary: Create a new object
+      tags:
+      - objects
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ObjectCreated'
+        '404':
+          description: Objects not found
+      parameters:
+        - name: key
+          in: query
+          required: false
+          schema:
+            type: string
+components:
+  schemas:
+    Bucket:
+      type: object
+      properties:
+        CreationDate:
+          type: string
+        Name:
+          type: string
+    Object:
+      type: object
+      properties:
+        ETag:
+          type: string
+        Key:
+          type: string
+        LastModified:
+          type: string
+        Owner:
+          type: object
+          properties:
+            DisplayName:
+              type: string
+            ID:
+              type: string
+        Size:
+          type: integer
+        StorageClass:
+          type: string
+    ObjectCreated:
+      type: object
+      properties:
+        ETag:
+          type: string
+        ServerSideEncryptio:
+          type: string

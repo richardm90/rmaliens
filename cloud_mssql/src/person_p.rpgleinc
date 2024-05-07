@@ -1,0 +1,31 @@
+**free
+
+dcl-proc get_base_url;
+  dcl-pi *n varchar(1024) end-pi;
+
+  dcl-s base_url varchar(1024);
+  dcl-s host char(1024);
+  dcl-s port char(5);
+
+  dcl-pr getenv pointer extproc('getenv');
+    envvar pointer value options(*string:*trim);
+  end-pr;
+
+  if getenv('RMALIENS_HOST') <> *null;
+    host = %str(getenv('RMALIENS_HOST'));
+  endif;
+  if host = '';
+    host = 'localhost';
+  endif;
+
+  if getenv('RMALIENS_PORT') <> *null;
+    port = %str(getenv('RMALIENS_PORT'));
+  endif;
+  if port = '';
+    port = '3101';
+  endif;
+
+  base_url = 'http://' + %trim(host) + ':' + %trim(port);
+
+  return base_url;
+end-proc;

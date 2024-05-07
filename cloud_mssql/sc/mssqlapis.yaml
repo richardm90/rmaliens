@@ -1,0 +1,7 @@
+name: MSSQLAPIS
+dir: /prj/rmaliens/cloud_mssql/apis
+start_cmd: NODE_ENV=development PORT=3101 node index.js
+check_alive: '3101'
+batch_mode: 'false'
+environment_vars:
+- PATH=/QOpenSys/pkgs/lib/nodejs18/bin:/QOpenSys/pkgs/bin:/QOpenSys/usr/bin:/usr/ccs/bin:/QOpenSys/usr/bin/X11:/usr/sbin:.:/usr/bin
