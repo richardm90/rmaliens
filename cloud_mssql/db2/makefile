@@ -23,8 +23,8 @@ BIN_LIB=RMALIENS
 
 # suffix rules
 .sql:
-	system -ks "CHGCURLIB CURLIB($(BIN_LIB))"
-	system -ks "RUNSQLSTM SRCSTMF('$<') COMMIT(*NONE) NAMING(*SYS)"
+	liblist -c $(BIN_LIB);\
+	system -ks "RUNSQLSTM SRCSTMF('$<') COMMIT(*NONE) NAMING(*SQL)"
 
 OBJECTS = download percrt perdlt perdltall perget pergetall person upload
 
