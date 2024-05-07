@@ -26,14 +26,17 @@ The following open source packages are used.
 * ILEvator is used as a HTTP client for the ILE environment on IBM i
 * noxDB is used to parse the web servers JSON response data
 
-# TODO
-
-* Update to the latest versions of ILEvator and noxDB
-
 ## Notes
 
 * The Google Sheets API impose quotas for read requests per minute
     * [Google Sheets API Usage Limits](https://developers.google.com/sheets/api/limits)
+
+
+
+# TODO
+
+* Update to the latest versions of ILEvator and noxDB
+
 
 
 # Your IBM i
@@ -45,6 +48,7 @@ will work out of the box.
 
 
 
+# Installation
 
 ## Prerequisites
 
@@ -69,7 +73,7 @@ export PATH=/QOpenSys/pkgs/bin:$PATH
 
 The `/QOpenSys/pkgs/bin` directory is where the OSS pacakges are installed.
 
-### QSYS Object Authority
+## QSYS Object Authority
 
 There is a of QSYS service program that needs to have the `*PUBLIC` authority
 changed from `*EXCLUDE` to `*USE`.
@@ -78,7 +82,7 @@ changed from `*EXCLUDE` to `*USE`.
 GRTOBJAUT OBJ(QSYS/QSYRGAP1) OBJTYPE(*SRVPGM) USER(*PUBLIC) AUT(*USE)
 ```
 
-### Create Demo User
+## Create Demo User
 
 Create a new user to use when installing and running the demo.
 
@@ -111,15 +115,19 @@ echo 'export PATH' >> $HOME/.profile
 exit
 ```
 
-### Third Party OSS Libraries
+## Third Party OSS Libraries
 
 This demo uses the following OSS libraries.
 * ILEVATOR
 * NOXDB
-* RMTOOLS
 
-If you don't have any of these installed already then install them with the 
-following commands.
+If you don't have any of these installed already you can install them using the
+official instructions.
+
+* [ILEvator](https://github.com/sitemule/ILEvator)
+* [noxDB](https://github.com/sitemule/noxDB)
+
+Alternatively you can restore pre-built versions from my site.
 
 ```shell
 ssh rmaliens@my_ibm_i
@@ -139,23 +147,15 @@ system "CPYFRMSTMF FROMSTMF('/tmp/NOXDB.savf') TOMBR('/QSYS.LIB/QGPL.LIB/NOXDB.F
 system "RSTLIB SAVLIB(NOXDB) DEV(*SAVF) SAVF(QGPL/NOXDB)"
 system "DLTOBJ OBJ(QGPL/NOXDB) OBJTYPE(*FILE)"
 rm /tmp/NOXDB.savf
-
-# RMTOOLS
-curl --output /tmp/RMTOOLS.savf https://rmsoftwareservices.co.uk/savfs/RMTOOLS.savf
-system "CRTLIB RMTOOLS TEXT('RM Software Services Tools v1.0.8')"
-system "CPYFRMSTMF FROMSTMF('/tmp/RMTOOLS.savf') TOMBR('/QSYS.LIB/QGPL.LIB/RMTOOLS.FILE') MBROPT(*REPLACE) CVTDTA(*NONE)"
-system "RSTLIB SAVLIB(RMTOOLS) DEV(*SAVF) SAVF(QGPL/RMTOOLS)"
-system "DLTOBJ OBJ(QGPL/RMTOOLS) OBJTYPE(*FILE)"
-rm /tmp/RMTOOLS.savf
 ```
 
 The QICU library is required by ILEvator. The project uses the ICU project
 (International Components for Unicode). ICU is available on IBM i in the library
 QICU. ILEvator binds to the service program QICU/QXICUUC40.
 
-### Google
+## Google
 
-#### Authentication
+### Authentication
 
 I used the following `google-spreadsheet` guide to enable the necessary Google 
 Developers Console, create a project and then generate authentication details.
@@ -167,7 +167,7 @@ I suggest using the recommended Service Account authentication method.
 The authentication details generated here will be needed when configuring the
 Nodej.s Google Sheets web server below.
 
-#### Persons Sheet
+### Persons Sheet
 
 It's important that the Google Sheet is called `Persons` and it should contain a
 worksheet called `Characters`.
@@ -175,13 +175,13 @@ worksheet called `Characters`.
 
 ## Installation
 
-First, install the `rmaliens` repository to your IBM i server.
+First, clone the `rmaliens` repository on your IBM i server.
 
 ```shell
 ssh rmaliens@my_ibm_i
 mkdir /prj
 cd /prj
-git clone https://richardm90@bitbucket.org/richardm90/rmaliens.git
+git clone https://github.com/richardm90/rmaliens.git
 ```
 
 The repository has now been installed to the IFS in directory `/prj/rmaliens`.
