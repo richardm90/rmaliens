@@ -10,6 +10,7 @@ SHELL=/QOpenSys/pkgs/bin/bash
 
 # BIN_LIB is the destination library for the programs.
 BIN_LIB=RMALIENS
+LIBLIST=$(BIN_LIB) ILEVATOR NOXDB
 
 # The directory where all dependencies have their copy books.
 INCDIR=$(HOME)/builds/include
