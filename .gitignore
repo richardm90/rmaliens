@@ -1,0 +1,4 @@
+cloud_mssql/apis/.env*
+cloud_mssql/apis/node_modules
+google_sheets/apis/.env*
+google_sheets/apis/node_modules

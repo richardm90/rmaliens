@@ -5,7 +5,7 @@ info:
 paths:
   /persons:
     get:
-      summary: Get all persons
+      summary: Get all people
       responses:
         '200':
           description: OK
@@ -16,7 +16,8 @@ paths:
                 items:
                   $ref: '#/components/schemas/Person'
     post:
-      summary: Create a new person
+      summary: Create a new person or an array of people
+      description: You can pass either an indvidiual Person object or an array
       requestBody:
         required: true
         content:
@@ -31,7 +32,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Person'
     delete:
-      summary: Delete all persons
+      summary: Delete all people
       responses:
         '204':
           description: No Content

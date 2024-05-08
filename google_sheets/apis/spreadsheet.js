@@ -24,6 +24,15 @@ export default class Spreadsheet {
     return formattedRow;
   }
 
+  #formatRows(rows) {
+    const formattedRows = [];
+    console.log('GOT HERE');
+    for (var i = 0; i < rows.length; i++) {
+      formattedRows.push(this.#formatRow(rows[i]));
+  }
+    return formattedRows;
+  }
+
   async #openDocument(docId) {
     const auth = new JWT({
       email: this.config.googleServiceAccountEmail,
@@ -67,10 +76,15 @@ export default class Spreadsheet {
   }
 
   async create(data) {
+    let result;
     await this.connect();
-    const row = await this.sheet.addRow(data);
-
-    const result = this.#formatRow(row);
+    if (Array.isArray(data)) {
+      const rows = await this.sheet.addRows(data);
+      result = this.#formatRows(rows);
+    } else {
+      const row = await this.sheet.addRow(data);
+      result = this.#formatRow(row);
+    }
 
     return result;
   }
