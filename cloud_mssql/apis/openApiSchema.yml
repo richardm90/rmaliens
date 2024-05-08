@@ -6,8 +6,6 @@ paths:
   /persons:
     get:
       summary: Get all people
-      tags:
-        - crud
       responses:
         '200':
           description: OK
@@ -19,8 +17,6 @@ paths:
                   $ref: '#/components/schemas/Person'
     post:
       summary: Create a new person
-      tags:
-        - crud
       requestBody:
         required: true
         content:
@@ -36,8 +32,6 @@ paths:
                 $ref: '#/components/schemas/Person'
     delete:
       summary: Delete all people
-      tags:
-        - crud
       responses:
         '204':
           description: No Content
@@ -50,8 +44,6 @@ paths:
           type: integer
     get:
       summary: Get a person by ID
-      tags:
-        - crud
       responses:
         '200':
           description: OK
@@ -63,8 +55,6 @@ paths:
           description: Person not found
     put:
       summary: Update a person by ID
-      tags:
-        - crud
       requestBody:
         required: true
         content:
@@ -82,8 +72,6 @@ paths:
           description: Person not found
     delete:
       summary: Delete a person by ID
-      tags:
-        - crud
       responses:
         '204':
           description: No Content
