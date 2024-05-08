@@ -26,7 +26,6 @@ export default class Spreadsheet {
 
   #formatRows(rows) {
     const formattedRows = [];
-    console.log('GOT HERE');
     for (var i = 0; i < rows.length; i++) {
       formattedRows.push(this.#formatRow(rows[i]));
   }
@@ -134,15 +133,7 @@ export default class Spreadsheet {
       await row.delete();
       result = this.#formatRow(row);
     } else {
-      // Note the index starts at 2 to skip header row
-      for (let i = 2; i < this.sheet.rowCount; i++) {
-        const row = await this.#getRow(2);
-        if (row) {
-          await row.delete();
-        } else {
-          break;
-        }
-      }
+      await this.sheet.clearRows();
     }
 
     return result;
