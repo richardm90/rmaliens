@@ -6,26 +6,25 @@ ctl-opt dftactgrp(*no) actgrp(*new) debug(*yes) bnddir('HTTPAPI') main(main);
 /include contact_d
 
 dcl-proc main;
-  dcl-pi *n extpgm('CONCRTB');
+  dcl-pi *n extpgm('CONCRT');
     firstName varchar(255)      ccsid(1208) const;
     lastName  varchar(255)      ccsid(1208) const;
     result    like(SF_BUFFER_t) ccsid(1208) options(*nopass);
   end-pi;
 
-  dcl-ds login likeds(SF_LOGIN_t) inz(*likeds);
+  dcl-s url varchar(1024);
   dcl-s req like(SF_BUFFER_t) ccsid(1208);
   dcl-s res like(SF_BUFFER_t) ccsid(1208);
 
-  login = sf_login();
+  url = sf_inz();
 
   // Build the request JSON body
-  req = '{"FirstName": "' + firstName + '","LastName": "' + lastName + '"}';
+  // - Note that I'm forcing the department with a value of RMALIENS, this
+  //   makes it easier to filter my contacts in the Salesforce UI
+  req = '{"firstName": "' + firstName + '","lastName": "' + lastName + '","Department": "RMALIENS"}';
   
-  // Set bearer token
-  http_setauth(HTTP_AUTH_BEARER: '': login.access_token);
-
   // Create the contact
-  res = web_req('POST': login.instance_url + SF_CONTACT_PATH: req);
+  res = web_req('POST': url: req);
 
   // Return the response
   if %passed(result);
@@ -35,5 +34,4 @@ dcl-proc main;
   return;
 end-proc;
 
-/define INCLUDE_HTTPAPI_STUFF
 /include contact_p

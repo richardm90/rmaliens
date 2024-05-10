@@ -41,7 +41,7 @@ BINDFLAGS=TEXT(*MODULE) STGMDL(*INHERIT) TGTRLS($(TGTRLS))
 	liblist -a $(LIBLIST);\
 	system -ks "CRTSQLRPGI OBJ($(BIN_LIB)/$@) SRCSTMF('$<') $(SCFLAGS)"
 	
-OBJECTS = concrta concrtb condlta condltb congeta congetb
+OBJECTS = concrt condlt conget congetall
 
 all: clean compile 
 
@@ -53,6 +53,8 @@ install:
 	cp *.rpgleinc $(INCDIR)
 
 purge: clean
-	-system "DLTPGM $(BIN_LIB)/CONCRTB"
+	-system "DLTPGM $(BIN_LIB)/CONCRT"
+	-system "DLTPGM $(BIN_LIB)/CONDLT"
+	-system "DLTPGM $(BIN_LIB)/CONGET"
 
 .PHONY: install purge

@@ -1,5 +1,87 @@
 **free
 
+dcl-proc sf_inz;
+  dcl-pi *n varchar(1024);
+    sf_id     like(SF_ID_t)     const options(*omit:*nopass);
+    sf_query  like(SF_QUERY_t)  const options(*nopass);
+  end-pi;
+
+  dcl-s url varchar(1024);
+
+  select getenv('RMALIENS_SF_MODE');
+
+  when-is SF_MODE_DIRECT;
+    // Login to Salesforce
+    login = sf_login();
+    // Set bearer token
+    http_setauth(HTTP_AUTH_BEARER: '': login.access_token);
+    // Set URL
+    if %passed(sf_id) and %passed(sf_query);
+      url = sf_url(sf_id: sf_query);
+    elseif not %passed(sf_id) and %passed(sf_query);
+      url = sf_url(*omit: sf_query);
+    elseif %passed(sf_id);
+      url = sf_url(sf_id);
+    else;
+      url = sf_url();
+    endif;
+
+  when-is SF_MODE_NODEJS;
+    // Set URL
+    if %passed(sf_id);
+      url = sf_url(sf_id);
+    else;
+      url = sf_url();
+    endif;
+
+  other;
+    snd-msg *escape 'Environment variable RMALIENS_SF_MODE not set correctly';
+
+  endsl;
+
+  return url;
+end-proc;
+
+dcl-proc sf_url;
+  dcl-pi *n varchar(1024);
+    sf_id     like(SF_ID_t)     const options(*omit:*nopass);
+    sf_query  like(SF_QUERY_t)  const options(*nopass);
+  end-pi;
+
+  dcl-s url varchar(1024);
+
+  select getenv('RMALIENS_SF_MODE');
+
+  when-is SF_MODE_DIRECT;
+    // Set URL
+    url = login.instance_url;
+    if not %passed(sf_query);
+      url += SF_CONTACT_PATH;
+    else;
+      url += SF_QUERY_PATH;
+    endif;
+    if %passed(sf_id);
+      url += '/' + sf_id;
+    endif;
+    if %passed(sf_query);
+      url += '?q=' + http_urlEncode(sf_query);
+    endif;
+
+  when-is SF_MODE_NODEJS;
+    // Set URL
+    url = get_base_url() + '/contacts';
+    if %passed(sf_id);
+      url += '/' + sf_id;
+    endif;
+
+  other;
+    snd-msg *escape 'Environment variable RMALIENS_SF_MODE not set correctly';
+
+  endsl;
+
+  return url;
+end-proc;
+
 dcl-proc get_base_url;
   dcl-pi *n varchar(1024) end-pi;
 
@@ -39,8 +121,6 @@ dcl-proc getenv;
 
   return envvar_value;
 end-proc;
-
-/if defined(INCLUDE_HTTPAPI_STUFF)
 
 dcl-proc sf_config;
   dcl-pi *n likeds(SF_CONFIG_t) end-pi;
@@ -97,10 +177,10 @@ dcl-proc sf_login;
     'application/x-www-form-urlencoded'
   );
 
-  return parse_login_res(res);
+  return parse_sf_login_response(res);
 end-proc;
 
-dcl-proc parse_login_res;
+dcl-proc parse_sf_login_response;
   dcl-pi *n likeds(SF_LOGIN_t);
     login_res_json like(SF_BUFFER_t) const;
   end-pi;
@@ -149,5 +229,3 @@ dcl-proc web_req;
 
   return res;
 end-proc;
-
-/endif

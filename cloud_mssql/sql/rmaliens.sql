@@ -85,7 +85,7 @@ SELECT P.*
                          COLUMNS ( id        INTEGER       PATH 'lax $.id',
                                    firstname VARCHAR(255)  PATH 'lax $.firstName',
                                    lastname  VARCHAR(255)  PATH 'lax $.lastName' ) ) AS  P
---         WHERE LASTNAME='Dunphy'
+--         WHERE LASTNAME='Kirk'
         ORDER BY FIRSTNAME, LASTNAME
 ;
 STOP;

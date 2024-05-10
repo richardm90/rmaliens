@@ -1,80 +1,40 @@
 ﻿-- Ensure the connection is using system naming
 -- Set the library list (not needed for user RMALIENS), which
 --   has the initial library list set by the job description.
-CL: CHGLIBL LIBL(RMALIENS LIBHTTP YAJL QGPL QTEMP);
-STOP ;
+CL: CHGLIBL LIBL(RMALIENS ILEVATOR NOXDB LIBHTTP YAJL QGPL QTEMP);
+STOP;
 
--- Set the host and post
+-- First time through? Let's use the Cloud DB external data source ...
 CL: ADDENVVAR ENVVAR(RMALIENS_HOST) VALUE('localhost');
-CL: ADDENVVAR ENVVAR(RMALIENS_PORT) VALUE('3103');
+-- CL: ADDENVVAR ENVVAR(RMALIENS_HOST) VALUE('iug1.rowton.it');
+CL: ADDENVVAR ENVVAR(RMALIENS_PORT) VALUE('3101');
 STOP;
-
--- Seed the Cloud DB with some Star Trek characters
---   - we are providing the first name and last name
---   - ignore the empty third parameter, this is the returned response
-CALL CONTACT_CREATE_A('Beverly', 'Crusher', '');
-CALL CONTACT_CREATE_A('Christopher', 'Pike', '');
-CALL CONTACT_CREATE_A('Deanna', 'Troi', '');
-CALL CONTACT_CREATE_A('Geordi', 'La Forge', '');
-CALL CONTACT_CREATE_A('Hikaru', 'Sulu', '');
-CALL CONTACT_CREATE_A('James T.', 'Kirk', '');
-CALL CONTACT_CREATE_A('Jean-Luc', 'Picard', '');
-CALL CONTACT_CREATE_A('Khan Noonien', 'Singh', '');
-CALL CONTACT_CREATE_A('Leonard', 'McCoy', '');
-CALL CONTACT_CREATE_A('Montgomery', 'Scott', '');
-CALL CONTACT_CREATE_A('Mr', 'Data', '');
-CALL CONTACT_CREATE_A('Mr', 'Spock', '');
-CALL CONTACT_CREATE_A('Nyota', 'Uhura', '');
-CALL CONTACT_CREATE_A('Pavel', 'Chekov', '');
-CALL CONTACT_CREATE_A('Wesley', 'Crusher', '');
-CALL CONTACT_CREATE_A('William', 'Riker', '');
-CALL CONTACT_CREATE_A('Worf', 'TBC', '');
-STOP ;
-
--- First time through? Set the Salesforce credentials ...
---   - this should be stored externally, do not put your credentials in this source!
-CL: ADDENVVAR ENVVAR(SF_BASE_URL)       VALUE('<SF_BASE_URL>');
-CL: ADDENVVAR ENVVAR(SF_CLIENT_ID)      VALUE('<SF_CLIENT_ID>');
-CL: ADDENVVAR ENVVAR(SF_CLIENT_SECRET)  VALUE('<SF_CLIENT_SECRET>');
-CL: ADDENVVAR ENVVAR(SF_USERNAME)       VALUE('<SF_USERNAME>');
-CL: ADDENVVAR ENVVAR(SF_PASSWORD)       VALUE('<SF_PASSWORD>');
-CL: ADDENVVAR ENVVAR(SF_SECURITY_TOKEN) VALUE('<SF_SECURITY_TOKEN>');
-STOP ;
-
--- Seed the Cloud DB with some Star Trek characters
---   - we are providing the first name and last name
---   - ignore the empty third parameter, this is the returned response
-CALL CONTACT_CREATE_B('Beverly', 'Crusher', '');
-CALL CONTACT_CREATE_B('Christopher', 'Pike', '');
-CALL CONTACT_CREATE_B('Deanna', 'Troi', '');
-CALL CONTACT_CREATE_B('Geordi', 'La Forge', '');
-CALL CONTACT_CREATE_B('Hikaru', 'Sulu', '');
-CALL CONTACT_CREATE_B('James T.', 'Kirk', '');
-CALL CONTACT_CREATE_B('Jean-Luc', 'Picard', '');
-CALL CONTACT_CREATE_B('Khan Noonien', 'Singh', '');
-CALL CONTACT_CREATE_B('Leonard', 'McCoy', '');
-CALL CONTACT_CREATE_B('Montgomery', 'Scott', '');
-CALL CONTACT_CREATE_B('Mr', 'Data', '');
-CALL CONTACT_CREATE_B('Mr', 'Spock', '');
-CALL CONTACT_CREATE_B('Nyota', 'Uhura', '');
-CALL CONTACT_CREATE_B('Pavel', 'Chekov', '');
-CALL CONTACT_CREATE_B('Wesley', 'Crusher', '');
-CALL CONTACT_CREATE_B('William', 'Riker', '');
-CALL CONTACT_CREATE_B('Worf', 'TBC', '');
-STOP ;
-
--- You can also get and delete a specific person based on their Id
-CALL CONTACT_CREATE_B('Mr', 'Blobby', '');
-CALL CONTACT_GET_B('003WU0000034Y6EYAU', '');
-CALL CONTACT_DELETE_B('003WU0000034Y6EYAU', '');
-STOP;
-
-------------------------------
-
 
 -- Let's start by deleting all rows from the Cloud Person DB
 CALL PERSON_DELETEALL();
-STOP ;
+STOP;
+
+-- Seed the Cloud DB with some Star Trek characters
+--   - we are providing the first name and last name
+--   - ignore the empty third parameter, this is the returned response
+CALL PERSON_CREATE('Beverly', 'Crusher', '');
+CALL PERSON_CREATE('Christopher', 'Pike', '');
+CALL PERSON_CREATE('Deanna', 'Troi', '');
+CALL PERSON_CREATE('Geordi', 'La Forge', '');
+CALL PERSON_CREATE('Hikaru', 'Sulu', '');
+CALL PERSON_CREATE('James T.', 'Kirk', '');
+CALL PERSON_CREATE('Jean-Luc', 'Picard', '');
+CALL PERSON_CREATE('Khan Noonien', 'Singh', '');
+CALL PERSON_CREATE('Leonard', 'McCoy', '');
+CALL PERSON_CREATE('Montgomery', 'Scott', '');
+CALL PERSON_CREATE('Mr', 'Data', '');
+CALL PERSON_CREATE('Mr', 'Spock', '');
+CALL PERSON_CREATE('Nyota', 'Uhura', '');
+CALL PERSON_CREATE('Pavel', 'Chekov', '');
+CALL PERSON_CREATE('Wesley', 'Crusher', '');
+CALL PERSON_CREATE('William', 'Riker', '');
+CALL PERSON_CREATE('Worf', '', '');
+STOP;
 
 -- Now let's get all person rows from the Cloud DB
 CALL PERSON_GETALL('');
@@ -179,3 +139,45 @@ SELECT * FROM PERSON ORDER BY FIRSTNAME, LASTNAME ;
 CALL PERSON_UPLOAD();
 CALL PERSON_GETALL('');
 STOP;
+
+
+-- -----------------------------------------------------------------------------
+-- Third time through? Now let's use the Salesforce external data source ...
+CL: ADDENVVAR ENVVAR(RMALIENS_HOST) VALUE('localhost');
+CL: ADDENVVAR ENVVAR(RMALIENS_PORT) VALUE('3103');
+-- CL: CHGENVVAR ENVVAR(RMALIENS_SF_MODE) VALUE('direct');
+CL: CHGENVVAR ENVVAR(RMALIENS_SF_MODE) VALUE('nodejs');
+STOP;
+
+-- Let's start with an empty spreadsheet!
+CALL CONTACT_DELETEALL();
+STOP;
+
+-- Seed the Salesforce contacts with some Star Trek characters
+--   - we are providing the first name and last name
+--   - ignore the empty third parameter, this is the returned response
+--   - note that Salesforce requires a contact first name and last name
+CALL CONTACT_CREATE('Beverly', 'Crusher', '');
+CALL CONTACT_CREATE('Christopher', 'Pike', '');
+CALL CONTACT_CREATE('Deanna', 'Troi', '');
+CALL CONTACT_CREATE('Geordi', 'La Forge', '');
+CALL CONTACT_CREATE('Hikaru', 'Sulu', '');
+CALL CONTACT_CREATE('James T.', 'Kirk', '');
+CALL CONTACT_CREATE_A('Jean-Luc', 'Picard', '');
+CALL CONTACT_CREATE_A('Khan Noonien', 'Singh', '');
+CALL CONTACT_CREATE_A('Leonard', 'McCoy', '');
+CALL CONTACT_CREATE_A('Montgomery', 'Scott', '');
+CALL CONTACT_CREATE_A('Mr', 'Data', '');
+CALL CONTACT_CREATE_A('Mr', 'Spock', '');
+CALL CONTACT_CREATE_A('Nyota', 'Uhura', '');
+CALL CONTACT_CREATE_A('Pavel', 'Chekov', '');
+CALL CONTACT_CREATE_A('Wesley', 'Crusher', '');
+CALL CONTACT_CREATE_A('William', 'Riker', '');
+CALL CONTACT_CREATE_A('Worf', 'TBC', '');
+STOP ;
+
+-- You can also get and delete a specific contact based on their Id
+CALL CONTACT_GET('003WU00000357gfYAA', '');
+CALL CONTACT_DELETE('003WU00000357gfYAA', '');
+STOP;
+

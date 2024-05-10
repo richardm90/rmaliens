@@ -7,12 +7,13 @@ Using open source software, of course!
 A set of examples that demonstrate how to access external data on the IBM i from
 resources sitting in the cloud.
 
-This project demonstrates two separate examples of accessing external resources
-from the IBM i server.
+This project demonstrates three separate examples of accessing external
+resources from the IBM i server.
 
 1. Access data held in a Microsoft SQL Server database hosted on either the AWS
 or  Azure cloud platforms.
 1. Access data held in a Google Docs Sheet hosted on the Google cloud platform.
+1. Access data held in the Salesforce CRM platform
 
 ![RMALIENS Flow](./assets/images/RMALIENS_flow.jpg "RMALIENS Flow")
 
@@ -25,6 +26,8 @@ The following open source packages are used.
 * Service Commander to start, stop and manage the web servers
 * ILEvator is used as a HTTP client for the ILE environment on IBM i
 * noxDB is used to parse the web servers JSON response data
+* HTTPAPI is also used as a HTTP client
+* YAJL is also used to parse JSON data
 
 ## Notes
 
@@ -142,7 +145,7 @@ ssh rmaliens@my_ibm_i
 
 # ILEvator
 curl --output /tmp/ILEVATOR.savf https://rmsoftwareservices.co.uk/savfs/ILEVATOR.savf
-system "CRTLIB ILEVATOR TEXT('Sitemule: noxDB - Not Only XML')"
+system "CRTLIB ILEVATOR TEXT('Sitemule: HTTP client for ILE')"
 system "CPYFRMSTMF FROMSTMF('/tmp/ILEVATOR.savf') TOMBR('/QSYS.LIB/QGPL.LIB/ILEVATOR.FILE') MBROPT(*REPLACE) CVTDTA(*NONE)"
 system "RSTLIB SAVLIB(ILEVATOR) DEV(*SAVF) SAVF(QGPL/ILEVATOR)"
 system "DLTOBJ OBJ(QGPL/ILEVATOR) OBJTYPE(*FILE)"
@@ -158,14 +161,20 @@ rm /tmp/NOXDB.savf
 
 # HTTPAPI
 curl --output /tmp/HTTPAPI.savf https://www.scottklement.com/httpapi/httpapi.savf
-system "CRTLIB LIBHTTP TEXT('Sitemule: noxDB - Not Only XML')"
+system "CRTLIB LIBHTTP TEXT('Scott Klement HTTP client')"
 system "CPYFRMSTMF FROMSTMF('/tmp/HTTPAPI.savf') TOMBR('/QSYS.LIB/QGPL.LIB/HTTPAPI.FILE') MBROPT(*REPLACE) CVTDTA(*NONE)"
 system "RSTLIB SAVLIB(LIBHTTP) DEV(*SAVF) SAVF(QGPL/HTTPAPI)"
 system "DLTOBJ OBJ(QGPL/HTTPAPI) OBJTYPE(*FILE)"
 rm /tmp/HTTPAPI.savf
-```
 
-RSTLIB SAVLIB(LIBHTTP) DEV(*SAVF) SAVF(QGPL/HTTPAPI)
+# YAJL
+curl --output /tmp/YAJL.savf https://rmsoftwareservices.co.uk/savfs/YAJL.savf
+system "CRTLIB YAJL TEXT('Scott Klement YAJL library')"
+system "CPYFRMSTMF FROMSTMF('/tmp/YAJL.savf') TOMBR('/QSYS.LIB/QGPL.LIB/YAJL.FILE') MBROPT(*REPLACE) CVTDTA(*NONE)"
+system "RSTLIB SAVLIB(YAJL) DEV(*SAVF) SAVF(QGPL/YAJL)"
+system "DLTOBJ OBJ(QGPL/YAJL) OBJTYPE(*FILE)"
+rm /tmp/YAJL.savf
+```
 
 The QICU library is required by ILEvator. The project uses the ICU project
 (International Components for Unicode). ICU is available on IBM i in the library
@@ -221,6 +230,9 @@ npm install
 
 cd /prj/rmaliens/google_sheets/apis
 npm install
+
+cd /prj/rmaliens/salesforce/apis
+npm install
 ```
 
 ## Configuration
@@ -269,6 +281,17 @@ GOOGLE_SERVICE_ACCOUNT_EMAIL="<google_service_account_email>"
 GOOGLE_PRIVATE_KEY="<google_priveate_key>"
 ```
 
+The third file contains your Salesforce credentials.
+
+```shell
+# /prj/rmaliens/salesforce/apis/.env.development
+PORT=3103
+SF_LOGIN_URL="<sf_login_url>"
+SF_USERNAME="<sf_username>"
+SF_PASSWORD="<sf_password>"
+```
+
+
 ## Start the Web Servers
 
 Manage the web servers using Service Commander.
@@ -279,16 +302,20 @@ ssh rmaliens@my_ibm_i
 # Start the services
 sc start /prj/rmaliens/cloud_mssql/sc/mssqlapis.yaml
 sc start /prj/rmaliens/cloud_mssql/sc/sheetapis.yaml
+sc start /prj/rmaliens/cloud_mssql/sc/salesforce.yaml
 
 # Restart the services
 sc restart /prj/rmaliens/cloud_mssql/sc/mssqlapis.yaml
 sc restart /prj/rmaliens/cloud_mssql/sc/sheetapis.yaml
+sc restart /prj/rmaliens/cloud_mssql/sc/salesforce.yaml
 
 # Stop the services
 sc stop /prj/rmaliens/cloud_mssql/sc/mssqlapis.yaml
 sc stop /prj/rmaliens/cloud_mssql/sc/sheetapis.yaml
+sc stop /prj/rmaliens/cloud_mssql/sc/salesforce.yaml
 
 # Check the current status
 sc status /prj/rmaliens/cloud_mssql/sc/mssqlapis.yaml
 sc status /prj/rmaliens/cloud_mssql/sc/sheetapis.yaml
+sc status /prj/rmaliens/cloud_mssql/sc/salesforce.yaml
 ```

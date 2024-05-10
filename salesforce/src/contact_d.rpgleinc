@@ -3,7 +3,12 @@
 // Salesforce API paths
 dcl-c SF_CONTACT_PATH '/services/data/v52.0/sobjects/Contact';
 dcl-c SF_LOGIN_PATH   '/services/oauth2/token';
+dcl-c SF_QUERY_PATH   '/services/data/v52.0/query';
 
+// Salesforce API modes
+// - either direct from RPG or via Node
+dcl-c SF_MODE_DIRECT  'direct';
+dcl-c SF_MODE_NODEJS  'nodejs';
 dcl-ds SF_CONFIG_t qualified template inz;
   base_url        varchar(1024);
   client_id       varchar(128);
@@ -24,3 +29,8 @@ end-ds;
 
 dcl-s SF_BUFFER_t varchar(65536) template;
 dcl-s SF_ID_t     varchar(18) template;
+dcl-s SF_QUERY_t  varchar(1024) template;
+
+// Global Salesforce login structure
+// - this is populated within sf_inz()
+dcl-ds login likeds(SF_LOGIN_t) inz(*likeds);

@@ -16,7 +16,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/Contact'
     post:
-      summary: Create a new contacts
+      summary: Create a new contact
       requestBody:
         required: true
         content:

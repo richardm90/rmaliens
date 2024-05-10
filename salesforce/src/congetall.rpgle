@@ -1,4 +1,4 @@
-**free
+**FREE
 
 ctl-opt dftactgrp(*no) actgrp(*new) debug(*yes) bnddir('HTTPAPI') main(main);
 
@@ -6,21 +6,22 @@ ctl-opt dftactgrp(*no) actgrp(*new) debug(*yes) bnddir('HTTPAPI') main(main);
 /include contact_d
 
 dcl-proc main;
-  dcl-pi *n extpgm('CONGETB');
-    id      like(SF_ID_t) const;
+  dcl-pi *n extpgm('CONGETALL');
     result  like(SF_BUFFER_t) ccsid(1208) options(*nopass);
   end-pi;
 
-  dcl-ds login likeds(SF_LOGIN_t) inz(*likeds);
+  dcl-s url varchar(1024);
   dcl-s res like(SF_BUFFER_t) ccsid(1208);
+  dcl-s res like(SF_QUERY_t);
 
-  login = sf_login();
- 
-  // Set bearer token
-  http_setauth(HTTP_AUTH_BEARER: '': login.access_token);
+  query = 'SELECT Id, FirstName, LastName ' +
+          'FROM Contact ' +
+          'WHERE Department = ''RMALIENS''';
 
-  // Create the contact
-  res = web_req('DELETE': login.instance_url + SF_CONTACT_PATH + '/' + id);
+  url = sf_inz(id: query);
+
+  // Get the contacts
+  res = web_req('GET': url);
 
   // Return the response
   if %passed(result);
@@ -30,5 +31,4 @@ dcl-proc main;
   return;
 end-proc;
 
-/define INCLUDE_HTTPAPI_STUFF
 /include contact_p
