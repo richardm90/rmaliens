@@ -32,12 +32,13 @@ CALL CONTACT_CREATE_A('Worf', 'TBC', '');
 STOP ;
 
 -- First time through? Set the Salesforce credentials ...
-CL: ADDENVVAR ENVVAR(SF_BASE_URL)       VALUE('https://rmsoftwareservicesltd-dev-ed.develop.my.salesforce.com');
-CL: ADDENVVAR ENVVAR(SF_CLIENT_ID)      VALUE('***REMOVED***');
-CL: ADDENVVAR ENVVAR(SF_CLIENT_SECRET)  VALUE('***REMOVED***');
-CL: ADDENVVAR ENVVAR(SF_USERNAME)       VALUE('richard@rmsoftwareservices.co.uk.sandbox');
-CL: ADDENVVAR ENVVAR(SF_PASSWORD)       VALUE('***REMOVED***');
-CL: ADDENVVAR ENVVAR(SF_SECURITY_TOKEN) VALUE('***REMOVED***');
+--   - this should be stored externally, do not put your credentials in this source!
+CL: ADDENVVAR ENVVAR(SF_BASE_URL)       VALUE('<SF_BASE_URL>');
+CL: ADDENVVAR ENVVAR(SF_CLIENT_ID)      VALUE('<SF_CLIENT_ID>');
+CL: ADDENVVAR ENVVAR(SF_CLIENT_SECRET)  VALUE('<SF_CLIENT_SECRET>');
+CL: ADDENVVAR ENVVAR(SF_USERNAME)       VALUE('<SF_USERNAME>');
+CL: ADDENVVAR ENVVAR(SF_PASSWORD)       VALUE('<SF_PASSWORD>');
+CL: ADDENVVAR ENVVAR(SF_SECURITY_TOKEN) VALUE('<SF_SECURITY_TOKEN>');
 STOP ;
 
 -- Seed the Cloud DB with some Star Trek characters
