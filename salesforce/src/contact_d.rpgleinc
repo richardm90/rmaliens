@@ -1,0 +1,26 @@
+**free
+
+// Salesforce API paths
+dcl-c SF_CONTACT_PATH '/services/data/v52.0/sobjects/Contact';
+dcl-c SF_LOGIN_PATH   '/services/oauth2/token';
+
+dcl-ds SF_CONFIG_t qualified template inz;
+  base_url        varchar(1024);
+  client_id       varchar(128);
+  client_secret   varchar(128);
+  username        varchar(128);
+  password        varchar(128);
+  security_token  varchar(128);
+end-ds;
+
+dcl-ds SF_LOGIN_t qualified template inz;
+  access_token    varchar(128);
+  instance_url    varchar(1024);
+  id              varchar(1024);
+  token_type      varchar(128);
+  issued_at       varchar(128);
+  signature       varchar(128);
+end-ds;
+
+dcl-s SF_BUFFER_t varchar(65536) template;
+dcl-s SF_ID_t     varchar(18) template;

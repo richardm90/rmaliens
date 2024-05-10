@@ -1,0 +1,153 @@
+**free
+
+dcl-proc get_base_url;
+  dcl-pi *n varchar(1024) end-pi;
+
+  dcl-s base_url varchar(1024);
+  dcl-s host char(1024);
+  dcl-s port char(5);
+
+  host = getenv('RMALIENS_HOST');
+  if host = '';
+    host = 'localhost';
+  endif;
+
+  port = getenv('RMALIENS_PORT');
+  if port = '';
+    port = '3103';
+  endif;
+
+  base_url = 'http://' + %trim(host) + ':' + %trim(port);
+
+  return base_url;
+end-proc;
+
+dcl-proc getenv;
+  dcl-pi *n varchar(1024);
+    envvar varchar(1024) const;
+  end-pi;
+
+  dcl-pr getenv pointer extproc('getenv');
+    envvar pointer value options(*string:*trim);
+  end-pr;
+
+  dcl-s envvar_value varchar(1024);
+
+  if getenv(envvar) <> *null;
+    envvar_value = %str(getenv(envvar));
+  endif;
+
+  return envvar_value;
+end-proc;
+
+/if defined(INCLUDE_HTTPAPI_STUFF)
+
+dcl-proc sf_config;
+  dcl-pi *n likeds(SF_CONFIG_t) end-pi;
+
+  dcl-ds config         likeds(SF_CONFIG_t) inz(*likeds);
+
+  dcl-s base_url        varchar(1024);
+  dcl-s client_id       varchar(128);
+  dcl-s client_secret   varchar(128);
+  dcl-s username        varchar(128);
+  dcl-s password        varchar(128);
+  dcl-s security_token  varchar(128);
+
+  config.base_url       = getenv('SF_BASE_URL');
+  config.client_id      = getenv('SF_CLIENT_ID');
+  config.client_secret  = getenv('SF_CLIENT_SECRET');
+  config.username       = getenv('SF_USERNAME');
+  config.password       = getenv('SF_PASSWORD');
+  config.security_token = getenv('SF_SECURITY_TOKEN');
+
+  return config;
+end-proc;
+
+dcl-proc sf_login;
+  dcl-pi *n likeds(SF_LOGIN_t);
+    config_in likeds(SF_CONFIG_t) const options(*nopass);
+  end-pi;
+
+  dcl-ds config likeds(SF_CONFIG_t);
+  dcl-s req like(SF_BUFFER_t);
+  dcl-s res like(SF_BUFFER_t);
+
+  if %passed(config_in);
+    config = config_in;
+  else;
+    config = sf_config();
+  endif;
+
+  http_debug(*on);
+
+  // Build the login request body
+  req = 'grant_type=password&' +
+        'client_id=' + http_urlEncode(config.client_id) + '&' +
+        'client_secret=' + http_urlEncode(config.client_secret) + '&' +
+        'username=' + http_urlEncode(config.username) +  '&' +
+        'password=' + http_urlEncode(config.password) + 
+                      http_urlEncode(config.security_token);
+
+  // login
+  res = web_req(
+    'POST': 
+    config.base_url + SF_LOGIN_PATH: 
+    req: 
+    'application/x-www-form-urlencoded'
+  );
+
+  return parse_login_res(res);
+end-proc;
+
+dcl-proc parse_login_res;
+  dcl-pi *n likeds(SF_LOGIN_t);
+    login_res_json like(SF_BUFFER_t) const;
+  end-pi;
+
+  dcl-ds login_res likeds(SF_LOGIN_t) inz(*likeds);
+
+  data-into login_res
+            %data(login_res_json: 'case=any')
+            %parser('YAJLINTO');
+
+  return login_res;
+end-proc;
+
+///
+// Simple wrapper over 'http_req' that does pretty much the same thing
+// as 'http_string' but handles exceptions slightly differently. This 
+// procedure includes the HTTPAPI return code, error message and response
+// data in the exception message.
+/// 
+
+dcl-proc web_req;
+  dcl-pi *n varchar(100000);
+    type    varchar(10)     const;
+    url     varchar(32767)  const;
+    body    varchar(100000) const options(*varsize:*omit:*nopass);
+    ct_in   varchar(16384)  const options(*varsize:*omit:*nopass);
+  end-pi;
+
+  dcl-s ct like(ct_in) inz('application/json');
+  dcl-s res like(body);
+  dcl-s rc int(10);
+
+  if %passed(ct_in);
+    ct = ct_in;
+  endif;
+
+  if %passed(body);
+    rc = http_req(type: url: *omit: res: *omit: body: ct);
+  else;
+    rc = http_req(type: url: *omit: res);
+  endif;
+
+  if rc<>1 and (rc<200 or rc>299);
+    snd-msg *escape 'HTTPAPI ERROR: ' + %char(rc) + ' ' + %trimr(http_error()) + ' ' + res;
+  endif;
+
+  return res;
+end-proc;
+
+/endif

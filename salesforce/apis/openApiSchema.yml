@@ -1,0 +1,109 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Salesforce Contact API
+paths:
+  /contacts:
+    get:
+      summary: Get all contacts
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Contact'
+    post:
+      summary: Create a new contacts
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Contact'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contact'
+    delete:
+      summary: Delete all contacts
+      responses:
+        '204':
+          description: No Content
+  /contacts/faker:
+    post:
+      summary: Create one or more fake contacts
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                count:
+                  type: integer
+                  example: 10
+      responses:
+        '201':
+          description: Created
+  /contacts/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      summary: Get a contacts by ID
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contact'
+        '404':
+          description: Contact not found
+    put:
+      summary: Update a contacts by ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Contact'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contact'
+        '404':
+          description: Contact not found
+    delete:
+      summary: Delete a contacts by ID
+      responses:
+        '204':
+          description: No Content
+        '404':
+          description: Contact not found
+components:
+  schemas:
+    Contact:
+      type: object
+      properties:
+        Id:
+          type: string
+          readOnly: true
+        FirstName:
+          type: string
+        LastName:
+          type: string
+        Email:
+          type: string

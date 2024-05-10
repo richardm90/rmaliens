@@ -155,7 +155,17 @@ system "CPYFRMSTMF FROMSTMF('/tmp/NOXDB.savf') TOMBR('/QSYS.LIB/QGPL.LIB/NOXDB.F
 system "RSTLIB SAVLIB(NOXDB) DEV(*SAVF) SAVF(QGPL/NOXDB)"
 system "DLTOBJ OBJ(QGPL/NOXDB) OBJTYPE(*FILE)"
 rm /tmp/NOXDB.savf
+
+# HTTPAPI
+curl --output /tmp/HTTPAPI.savf https://www.scottklement.com/httpapi/httpapi.savf
+system "CRTLIB LIBHTTP TEXT('Sitemule: noxDB - Not Only XML')"
+system "CPYFRMSTMF FROMSTMF('/tmp/HTTPAPI.savf') TOMBR('/QSYS.LIB/QGPL.LIB/HTTPAPI.FILE') MBROPT(*REPLACE) CVTDTA(*NONE)"
+system "RSTLIB SAVLIB(LIBHTTP) DEV(*SAVF) SAVF(QGPL/HTTPAPI)"
+system "DLTOBJ OBJ(QGPL/HTTPAPI) OBJTYPE(*FILE)"
+rm /tmp/HTTPAPI.savf
 ```
+
+RSTLIB SAVLIB(LIBHTTP) DEV(*SAVF) SAVF(QGPL/HTTPAPI)
 
 The QICU library is required by ILEvator. The project uses the ICU project
 (International Components for Unicode). ICU is available on IBM i in the library
@@ -218,7 +228,7 @@ npm install
 Update the `RMALIENS` job description to include the application and third party libraries.
 
 ```shell
-CHGJOBD JOBD(RMALIENS) INLLIBL(RMALIENS ILEVATOR NOXDB QGPL QTEMP)
+CHGJOBD JOBD(RMALIENS) INLLIBL(RMALIENS ILEVATOR NOXDB LIBHTTP YAJL QGPL QTEMP)
 ```
 
 Create the environment variable configuration files.
