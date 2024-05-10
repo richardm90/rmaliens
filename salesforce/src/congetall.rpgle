@@ -12,13 +12,13 @@ dcl-proc main;
 
   dcl-s url varchar(1024);
   dcl-s res like(SF_BUFFER_t) ccsid(1208);
-  dcl-s res like(SF_QUERY_t);
+  dcl-s query like(SF_QUERY_t);
 
   query = 'SELECT Id, FirstName, LastName ' +
           'FROM Contact ' +
           'WHERE Department = ''RMALIENS''';
 
-  url = sf_inz(id: query);
+  url = sf_inz(*omit: query);
 
   // Get the contacts
   res = web_req('GET': url);

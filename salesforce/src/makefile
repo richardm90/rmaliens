@@ -41,7 +41,7 @@ BINDFLAGS=TEXT(*MODULE) STGMDL(*INHERIT) TGTRLS($(TGTRLS))
 	liblist -a $(LIBLIST);\
 	system -ks "CRTSQLRPGI OBJ($(BIN_LIB)/$@) SRCSTMF('$<') $(SCFLAGS)"
 	
-OBJECTS = concrt condlt conget congetall
+OBJECTS = concrt condlt condltall conget congetall
 
 all: clean compile 
 
@@ -55,6 +55,8 @@ install:
 purge: clean
 	-system "DLTPGM $(BIN_LIB)/CONCRT"
 	-system "DLTPGM $(BIN_LIB)/CONDLT"
+	-system "DLTPGM $(BIN_LIB)/CONDLTALL"
 	-system "DLTPGM $(BIN_LIB)/CONGET"
+	-system "DLTPGM $(BIN_LIB)/CONGETALL"
 
 .PHONY: install purge

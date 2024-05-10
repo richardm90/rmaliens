@@ -1,0 +1,56 @@
+[
+    {
+      "name": "Echo Code4i variables",
+      "command": "export HOME=/home/rmaliens; echo 'BASENAME:     &BASENAME'; echo 'EXT:          &EXT'; echo 'FILEDIR:      &FILEDIR'; echo 'FULLPATH:     &FULLPATH'; echo $\"HOME:         $HOME\"; echo 'LOCALPATH:    &LOCALPATH'; echo 'NAME:         &NAME'; echo 'PARENT:       &PARENT'; echo $\"PWD:          $PWD\"; echo 'RELATIVEPATH: &RELATIVEPATH'; echo 'WORKDIR:      &WORKDIR';",
+      "environment": "pase",
+      "deployFirst": true,
+      "extensions": [
+        "GLOBAL"
+      ]
+    },
+    {
+      "name": "GNU Make - build all 🔨",
+      "command": "export HOME=/home/rmaliens; /QOpenSys/pkgs/bin/gmake",
+      "extensions": [
+        "GLOBAL"
+      ],
+      "environment": "pase",
+      "deployFirst": true
+    },
+    {
+      "name": "GNU Make - build current 🔨",
+      "command": "export HOME=/home/rmaliens; cd &FILEDIR; /QOpenSys/pkgs/bin/gmake OPT=*EVENTF",
+      "environment": "pase",
+      "deployFirst": true,
+      "extensions": [
+        "GLOBAL"
+      ]
+    },
+    {
+      "name": "GNU Make - build current **TEMP** 🔨",
+      "command": "export HOME=/home/rmaliens; cd ./rmrunsql; /QOpenSys/pkgs/bin/gmake OPT=*EVENTF",
+      "environment": "pase",
+      "deployFirst": true,
+      "extensions": [
+        "GLOBAL"
+      ]
+    },
+    {
+      "name": "GNU Make - install all 🔨",
+      "command": "export HOME=/home/rmaliens; /QOpenSys/pkgs/bin/gmake install",
+      "extensions": [
+        "GLOBAL"
+      ],
+      "environment": "pase",
+      "deployFirst": true
+    },
+    {
+      "name": "What is my environment?",
+      "command": "printenv",
+      "extensions": [
+        "GLOBAL"
+      ],
+      "environment": "pase",
+      "deployFirst": false
+    }
+  ]
