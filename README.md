@@ -300,22 +300,22 @@ Manage the web servers using Service Commander.
 ssh rmaliens@my_ibm_i
 
 # Start the services
-sc start /prj/rmaliens/cloud_mssql/sc/mssqlapis.yaml
-sc start /prj/rmaliens/cloud_mssql/sc/sheetapis.yaml
-sc start /prj/rmaliens/cloud_mssql/sc/salesforce.yaml
+sc start /prj/rmaliens/sc/mssqlapis.yaml
+sc start /prj/rmaliens/sc/sheetapis.yaml
+sc start /prj/rmaliens/sc/salesforce.yaml
 
 # Restart the services
-sc restart /prj/rmaliens/cloud_mssql/sc/mssqlapis.yaml
-sc restart /prj/rmaliens/cloud_mssql/sc/sheetapis.yaml
-sc restart /prj/rmaliens/cloud_mssql/sc/salesforce.yaml
+sc restart /prj/rmaliens/sc/mssqlapis.yaml
+sc restart /prj/rmaliens/sc/sheetapis.yaml
+sc restart /prj/rmaliens/sc/salesforce.yaml
 
 # Stop the services
-sc stop /prj/rmaliens/cloud_mssql/sc/mssqlapis.yaml
-sc stop /prj/rmaliens/cloud_mssql/sc/sheetapis.yaml
-sc stop /prj/rmaliens/cloud_mssql/sc/salesforce.yaml
+sc stop /prj/rmaliens/sc/mssqlapis.yaml
+sc stop /prj/rmaliens/sc/sheetapis.yaml
+sc stop /prj/rmaliens/sc/salesforce.yaml
 
 # Check the current status
-sc status /prj/rmaliens/cloud_mssql/sc/mssqlapis.yaml
-sc status /prj/rmaliens/cloud_mssql/sc/sheetapis.yaml
-sc status /prj/rmaliens/cloud_mssql/sc/salesforce.yaml
+sc status /prj/rmaliens/sc/mssqlapis.yaml
+sc status /prj/rmaliens/sc/sheetapis.yaml
+sc status /prj/rmaliens/sc/salesforce.yaml
 ```
