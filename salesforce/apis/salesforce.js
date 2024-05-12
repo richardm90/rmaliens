@@ -63,6 +63,7 @@ export default class Salesforce {
         MailingPostalCode: faker.location.zipCode(),
         Phone: faker.phone.number(),
         HomePhone: faker.phone.number(),
+        Department: "RMALIENS",
       }
 
       const contact = await this.create(data);
