@@ -105,5 +105,3 @@ components:
           type: string
         LastName:
           type: string
-        Email:
-          type: string

@@ -77,14 +77,14 @@ export default class Salesforce {
     await this.connect();
 
     // Query to retrieve all Contact records
-    const query = "SELECT Id, FirstName, LastName, Email FROM Contact";
+    const query = "SELECT Id, FirstName, LastName FROM Contact";
 
     // Execute the SOQL query to retrieve all Contact records
     const result = await this.conn.query(query);
 
     await this.disconnect();
 
-    const contacts = result.records.map(({Id, FirstName, LastName, Email}) => ({Id, FirstName, LastName, Email}));
+    const contacts = result.records.map(({Id, FirstName, LastName}) => ({Id, FirstName, LastName}));
 
     return contacts;
   }
@@ -96,8 +96,8 @@ export default class Salesforce {
 
     await this.disconnect();
 
-    const contact = {Id: result.Id, FirstName: result.FirstName, LastName: result.LastName, Email: result.Email};
-    // const contact = result;
+    // const contact = {Id: result.Id, FirstName: result.FirstName, LastName: result.LastName};
+    const contact = result;
 
     return contact;
   }

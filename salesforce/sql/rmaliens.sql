@@ -6,7 +6,6 @@ STOP;
 
 -- First time through? Let's use the Cloud DB external data source ...
 CL: ADDENVVAR ENVVAR(RMALIENS_HOST) VALUE('localhost');
--- CL: ADDENVVAR ENVVAR(RMALIENS_HOST) VALUE('iug1.rowton.it');
 CL: ADDENVVAR ENVVAR(RMALIENS_PORT) VALUE('3101');
 STOP;
 
@@ -42,8 +41,8 @@ STOP;
 
 -- You can also get and delete a specific person based on their Id
 CALL PERSON_CREATE('Mr', 'Blobby', '');
-CALL PERSON_GET(18, '');
-CALL PERSON_DELETE(18, '');
+CALL PERSON_GET(93, '');
+CALL PERSON_DELETE(93, '');
 STOP;
 
 -- Now let's download all person rows from the Cloud DB
@@ -94,7 +93,6 @@ STOP;
 -- -----------------------------------------------------------------------------
 -- Second time through? Now let's use the Google Sheet external data source ...
 CL: CHGENVVAR ENVVAR(RMALIENS_HOST) VALUE('localhost');
--- CL: CHGENVVAR ENVVAR(RMALIENS_HOST) VALUE('iug1.rowton.it');
 CL: CHGENVVAR ENVVAR(RMALIENS_PORT) VALUE('3102');
 STOP;
 
@@ -143,10 +141,10 @@ STOP;
 
 -- -----------------------------------------------------------------------------
 -- Third time through? Now let's use the Salesforce external data source ...
-CL: ADDENVVAR ENVVAR(RMALIENS_HOST) VALUE('localhost');
-CL: ADDENVVAR ENVVAR(RMALIENS_PORT) VALUE('3103');
--- CL: CHGENVVAR ENVVAR(RMALIENS_SF_MODE) VALUE('direct');
-CL: CHGENVVAR ENVVAR(RMALIENS_SF_MODE) VALUE('nodejs');
+CL: CHGENVVAR ENVVAR(RMALIENS_HOST) VALUE('localhost');
+CL: CHGENVVAR ENVVAR(RMALIENS_PORT) VALUE('3103');
+CL: CHGENVVAR ENVVAR(RMALIENS_SF_MODE) VALUE('direct');
+CL: ADDENVVAR ENVVAR(RMALIENS_SF_MODE) VALUE('nodejs');
 STOP;
 
 -- Let's start with an empty spreadsheet!
@@ -163,21 +161,25 @@ CALL CONTACT_CREATE('Deanna', 'Troi', '');
 CALL CONTACT_CREATE('Geordi', 'La Forge', '');
 CALL CONTACT_CREATE('Hikaru', 'Sulu', '');
 CALL CONTACT_CREATE('James T.', 'Kirk', '');
-CALL CONTACT_CREATE_A('Jean-Luc', 'Picard', '');
-CALL CONTACT_CREATE_A('Khan Noonien', 'Singh', '');
-CALL CONTACT_CREATE_A('Leonard', 'McCoy', '');
-CALL CONTACT_CREATE_A('Montgomery', 'Scott', '');
-CALL CONTACT_CREATE_A('Mr', 'Data', '');
-CALL CONTACT_CREATE_A('Mr', 'Spock', '');
-CALL CONTACT_CREATE_A('Nyota', 'Uhura', '');
-CALL CONTACT_CREATE_A('Pavel', 'Chekov', '');
-CALL CONTACT_CREATE_A('Wesley', 'Crusher', '');
-CALL CONTACT_CREATE_A('William', 'Riker', '');
-CALL CONTACT_CREATE_A('Worf', 'TBC', '');
+CALL CONTACT_CREATE('Jean-Luc', 'Picard', '');
+CALL CONTACT_CREATE('Khan Noonien', 'Singh', '');
+CALL CONTACT_CREATE('Leonard', 'McCoy', '');
+CALL CONTACT_CREATE('Montgomery', 'Scott', '');
+CALL CONTACT_CREATE('Mr', 'Data', '');
+CALL CONTACT_CREATE('Mr', 'Spock', '');
+CALL CONTACT_CREATE('Nyota', 'Uhura', '');
+CALL CONTACT_CREATE('Pavel', 'Chekov', '');
+CALL CONTACT_CREATE('Wesley', 'Crusher', '');
+CALL CONTACT_CREATE('William', 'Riker', '');
+CALL CONTACT_CREATE('Worf', 'TBC', '');
 STOP ;
 
+-- Now let's get all of our contact rows from Salesforce
+CALL CONTACT_GETALL('');
+STOP;
+
 -- You can also get and delete a specific contact based on their Id
-CALL CONTACT_GET('003WU00000357gfYAA', '');
-CALL CONTACT_DELETE('003WU00000357gfYAA', '');
+CALL CONTACT_GET('003WU0000036WTKYA2', '');
+CALL CONTACT_DELETE('003WU0000035L25YAE', '');
 STOP;
 

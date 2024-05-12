@@ -53,7 +53,7 @@ dcl-proc get_contact_ids;
   dcl-ds contact_ids likeds(contact_ids_t) inz(*likeds);
 
   data-into contact_ids
-    %data(res : 'case=any countprefix=num_')
+    %data(res : 'case=any allowextra=yes countprefix=num_')
     %parser('YAJLINTO');
 
   return contact_ids;

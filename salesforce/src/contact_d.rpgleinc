@@ -27,9 +27,11 @@ dcl-ds SF_LOGIN_t qualified template inz;
   signature       varchar(128);
 end-ds;
 
-dcl-s SF_BUFFER_t varchar(65536) template;
-dcl-s SF_ID_t     varchar(18) template;
-dcl-s SF_QUERY_t  varchar(1024) template;
+dcl-s SF_BUFFER_t     varchar(65536) template;
+dcl-s SF_ID_t         varchar(18) template;
+dcl-s SF_FIRSTNAME_t  varchar(40) template;
+dcl-s SF_LASTNAME_t   varchar(80) template;
+dcl-s SF_QUERY_t      varchar(1024) template;
 
 // Global Salesforce login structure
 // - this is populated within sf_inz()
