@@ -1,4 +1,4 @@
-**FREE
+**free
 
 ctl-opt dftactgrp(*no) actgrp(*new) debug(*yes) main(main);
 ctl-opt bnddir('ILEVATOR');

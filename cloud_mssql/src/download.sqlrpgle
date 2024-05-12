@@ -1,4 +1,4 @@
-**FREE
+**free
 
 ctl-opt dftactgrp(*no) actgrp(*new) debug(*yes) main(main);
 ctl-opt bnddir('ILEVATOR');
@@ -14,7 +14,6 @@ dcl-proc main;
     dcl-s people_l varchar(IV_BUFFER_SIZE:4) ccsid(1208);
     dcl-s people varchar(IV_BUFFER_SIZE:4);
     dcl-ds person likeds(PERSON_t) inz(*likeds);
-    dcl-s res varchar(IV_BUFFER_SIZE:4) ccsid(1208);
     dcl-s document pointer;
     dcl-ds list likeds(JSON_ITERATOR);
 
@@ -25,8 +24,6 @@ dcl-proc main;
                    timfmt = *iso,
                    closqlcsr= *endactgrp,
                    naming = *sys;
-
-    // ibmi_delete_people();
 
     PERGETALL(people_l);
     people = people_l;
@@ -46,14 +43,6 @@ dcl-proc main;
     enddo;
 
     return;
-end-proc;
-
-dcl-proc ibmi_delete_people;
-    dcl-pi *n end-pi;
-
-    exec sql
-        DELETE FROM PERSON;
-
 end-proc;
 
 dcl-proc ibmi_save_person;
