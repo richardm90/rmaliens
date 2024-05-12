@@ -15,24 +15,26 @@ or  Azure cloud platforms.
 1. Access data held in a Google Docs Sheet hosted on the Google cloud platform.
 1. Access data held in the Salesforce CRM platform
 
-![RMALIENS Flow](./assets/images/RMALIENS_flow.jpg "RMALIENS Flow")
-
 The following open source packages are used.
 
 * Node.js is used for the web servers
     * `express` - Fast, unopinionated, minimalist web framework for Node.js
     * `mssql` - Microsoft SQL Server client for Node.js
     * `google-spreadsheet` - The most popular Google Sheets API wrapper for javascript / typescript
+    * `jsforce` - Salesforce API Library for JavaScript applications
 * Service Commander to start, stop and manage the web servers
 * ILEvator is used as a HTTP client for the ILE environment on IBM i
 * noxDB is used to parse the web servers JSON response data
 * HTTPAPI is also used as a HTTP client
 * YAJL is also used to parse JSON data
 
-## Notes
+## Microsoft SQL Server and Google Sheets Flow
 
-* The Google Sheets API impose quotas for read requests per minute
-    * [Google Sheets API Usage Limits](https://developers.google.com/sheets/api/limits)
+![RMALIENS Flow](./assets/images/RMALIENS_flow_person.jpg "RMALIENS Flow")
+
+## Salesforce Flow
+
+![RMALIENS Flow](./assets/images/RMALIENS_flow_contact.jpg "RMALIENS Flow")
 
 
 
@@ -130,15 +132,19 @@ exit
 
 This demo uses the following OSS libraries.
 * ILEVATOR
+* LIBHTTP (HTTPAPI)
 * NOXDB
+* YAJL
 
 If you don't have any of these installed already you can install them using the
 official instructions.
 
 * [ILEvator](https://github.com/sitemule/ILEvator)
+* [HTTPAPI](https://www.scottklement.com/httpapi)
 * [noxDB](https://github.com/sitemule/noxDB)
+* [YAJL](https://www.scottklement.com/yajl)
 
-Alternatively you can restore pre-built versions from my site.
+Alternatively you can restore pre-built versions, some from my site.
 
 ```shell
 ssh rmaliens@my_ibm_i
