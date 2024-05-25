@@ -8,16 +8,16 @@ ctl-opt bnddir('NOXDB');
 /include person_d
 
 dcl-proc main;
-	dcl-pi *n extpgm('PERDLTALL') end-pi;
+  dcl-pi *n extpgm('PERDLTALL') end-pi;
 
-	dcl-s base_url varchar(1024);
+  dcl-s base_url varchar(1024);
 
-	base_url = get_base_url();
+  base_url = get_base_url();
 
-	// Delete all person rows
-	iv_delete(base_url + '/persons/');
+  // Delete all person rows
+  iv_delete(base_url + '/persons/');
 
-	return;
+  return;
 end-proc;
 
 /include person_p
