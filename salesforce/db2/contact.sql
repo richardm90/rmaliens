@@ -1,5 +1,5 @@
 CREATE OR REPLACE TABLE CONTACT (
-    id int NOT NULL,
-    FirstName varchar(255),
-    LastName varchar(255)
+    id varchar(18) NOT NULL,
+    firstName varchar(255),
+    lastName varchar(255)
 );

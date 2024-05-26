@@ -13,7 +13,7 @@ resources from the IBM i server.
 1. Access data held in a Microsoft SQL Server database hosted on either the AWS
 or  Azure cloud platforms.
 1. Access data held in a Google Docs Sheet hosted on the Google cloud platform.
-1. Access data held in the Salesforce CRM platform
+1. Access data held in the Salesforce CRM platform.
 
 The following open source packages are used.
 
@@ -54,8 +54,8 @@ file `/prj/rmaliens/cloud_mssql/sql/mssql_demo.sql`
 
 # Your IBM i
 
-In this project there are lots of references to `my_ibm_i` both in this readme
-and witin the code. This is the name of your IBM i. If you add `my_ibm_i` to
+In this project there are lots of references to `myibmi` both in this readme
+and witin the code. This is the name of your IBM i. If you add `myibmi` to
 your hosts file and point it to your IBM i IP address the instructions and code
 will work out of the box.
 
@@ -71,13 +71,14 @@ Note that the `yum` command needs to be executed as a user with `*ALLOBJ`
 authority.
 
 ```shell
-ssh my_allobj_user@my_ibm_i
-/QOpenSys/pkgs/bin/yum install git make-gnu nano nodejs18 service-commander
+ssh my_allobj_user@myibmi
+/QOpenSys/pkgs/bin/yum update
+/QOpenSys/pkgs/bin/yum install git make-gnu nano nodejs20 service-commander unzip
 ```
 
-These instructions assume that user connecting to the IBM i server 
-(via SSH) has the `/QOpenSys/pkgs/bin` directory in your path. If not
-then ensure you enter the following command after connectint via SSH. You
+The rest of the instructions assume the user connecting to the IBM i server 
+(via SSH) has the `/QOpenSys/pkgs/bin` directory in their path. If not then
+ensure you enter the following command after connecting via SSH. You would
 need to enter this command each time you connect via SSH.
 
 ```shell
@@ -104,13 +105,14 @@ CRTJOBD JOBD(RMALIENS)
 CRTUSRPRF USRPRF(RMALIENS) PASSWORD(<password>) USRCLS(*PGMR) JOBD(RMALIENS) GRPPRF(QPGMR) OWNER(*GRPPRF) LANGID(ENG) CNTRYID(GB) CCSID(1146) SETJOBATR(*DATFMT) LOCALE('/QSYS.LIB/EN_GB.LOCALE')
 CHGOBJOWN OBJ(RMALIENS) OBJTYPE(*JOBD) NEWOWN(RMALIENS)
 GRTOBJAUT OBJ(RSTLIB) OBJTYPE(*CMD) USER(RMALIENS) AUT(*USE)
+GRTOBJAUT OBJ(RSTOBJ) OBJTYPE(*CMD) USER(RMALIENS) AUT(*USE)
 ```
 
 Now connect to the IBM i server using the new `RMALIENS` user and set the SSH
 environment with the following commands.
 
 ```shell
-ssh rmaliens@my_ibm_i
+ssh rmaliens@myibmi
 
 # Create the home directory
 mkdir -p $HOME
@@ -147,7 +149,7 @@ official instructions.
 Alternatively you can restore pre-built versions, some from my site.
 
 ```shell
-ssh rmaliens@my_ibm_i
+ssh rmaliens@myibmi
 
 # ILEvator
 curl --output /tmp/ILEVATOR.savf https://rmsoftwareservices.co.uk/savfs/ILEVATOR.savf
@@ -174,17 +176,26 @@ system "DLTOBJ OBJ(QGPL/HTTPAPI) OBJTYPE(*FILE)"
 rm /tmp/HTTPAPI.savf
 
 # YAJL
-curl --output /tmp/YAJL.savf https://rmsoftwareservices.co.uk/savfs/YAJL.savf
+curl --output /tmp/YAJL.zip https://www.scottklement.com/yajl/YAJL.zip
+unzip /tmp/YAJL.zip yajllib72.savf -d /tmp
+system "CPYFRMSTMF FROMSTMF('/tmp/yajllib72.savf') TOMBR('/QSYS.LIB/QGPL.LIB/YAJL.FILE') MBROPT(*REPLACE) CVTDTA(*NONE)"
 system "CRTLIB YAJL TEXT('Scott Klement YAJL library')"
-system "CPYFRMSTMF FROMSTMF('/tmp/YAJL.savf') TOMBR('/QSYS.LIB/QGPL.LIB/YAJL.FILE') MBROPT(*REPLACE) CVTDTA(*NONE)"
-system "RSTLIB SAVLIB(YAJL) DEV(*SAVF) SAVF(QGPL/YAJL)"
+system "RSTOBJ OBJ(*ALL) SAVLIB(QTEMP) DEV(*SAVF) RSTLIB(YAJL) SAVF(QGPL/YAJL)"
 system "DLTOBJ OBJ(QGPL/YAJL) OBJTYPE(*FILE)"
-rm /tmp/YAJL.savf
+rm /tmp/yajllib72.savf
+rm /tmp/YAJL.zip
 ```
 
 The QICU library is required by ILEvator. The project uses the ICU project
 (International Components for Unicode). ICU is available on IBM i in the library
 QICU. ILEvator binds to the service program QICU/QXICUUC40.
+
+### DCM *SYSTEM Certificate Store
+
+The Salesforce examples require the use of HTTPS, which means the `*SYSTEM` 
+certificate store must exist in DCM and the certificate store files need the 
+appropriate authorities for the user running the examples to access. 
+
 
 ## Google
 
@@ -208,11 +219,19 @@ worksheet called `Characters`.
 
 ## Build the RMALIENS Library
 
-First, clone the `rmaliens` repository on your IBM i server.
+If you don't already have a `/prj` directory in the IFS then create and change
+the owner to `rmaliens`. The `rmaliens` repo will be cloned into `/prj`.
 
 ```shell
-ssh rmaliens@my_ibm_i
+ssh my_allobj_user@myibmi
 mkdir /prj
+system "CHGOWN OBJ('/prj') NEWOWN(RMALIENS)"
+```
+
+Now, clone the `rmaliens` repository on your IBM i server.
+
+```shell
+ssh rmaliens@myibmi
 cd /prj
 git clone https://github.com/richardm90/rmaliens.git
 ```
@@ -223,12 +242,12 @@ Now, let's build the project.
 
 ```shell
 cd /prj/rmaliens
-gmake
+make
 ```
 
 ## Install Node.js Packages
 
-Install Node.js packages on the web server.
+Install Node.js packages for `rmaliens` the web servers.
 
 ```shell
 cd /prj/rmaliens/cloud_mssql/apis
@@ -302,8 +321,11 @@ SF_PASSWORD="<sf_password>"
 
 Manage the web servers using Service Commander.
 
+**Note** that if Service Commander complains (e.g. Unhandled exception) when 
+trying to start a service you may need to update the `openjdk` package.
+
 ```shell
-ssh rmaliens@my_ibm_i
+ssh rmaliens@myibmi
 
 # Start the services
 sc start /prj/rmaliens/sc/mssqlapis.yaml

@@ -74,18 +74,18 @@ export default class Salesforce {
     return result;
   }
 
-  async readAll() {
+  async readAll(query) {
     await this.connect();
-
-    // Query to retrieve all Contact records
-    const query = "SELECT Id, FirstName, LastName FROM Contact";
 
     // Execute the SOQL query to retrieve all Contact records
     const result = await this.conn.query(query);
 
+    console.log(result);
+
     await this.disconnect();
 
-    const contacts = result.records.map(({Id, FirstName, LastName}) => ({Id, FirstName, LastName}));
+    // const contacts = result.records.map(({Id, FirstName, LastName}) => ({Id, FirstName, LastName}));
+    const contacts = result;
 
     return contacts;
   }

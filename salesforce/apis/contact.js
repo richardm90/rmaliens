@@ -13,6 +13,7 @@ const salesforce = new Salesforce(config);
 
 router.get('/', async (_, res) => {
   try {
+    console.log(req.params);
     // Return a list of contacts
     const contacts = await salesforce.readAll();
     res.status(200).json(contacts);

@@ -10,7 +10,7 @@ SHELL=/QOpenSys/pkgs/bin/bash
 
 # BIN_LIB is the destination library for the programs.
 BIN_LIB=RMALIENS
-LIBLIST=$(BIN_LIB) LIBHTTP
+LIBLIST=$(BIN_LIB) LIBHTTP YAJL
 
 # The directory where all dependencies have their copy books.
 INCDIR=$(HOME)/builds/include
@@ -41,7 +41,7 @@ BINDFLAGS=TEXT(*MODULE) STGMDL(*INHERIT) TGTRLS($(TGTRLS))
 	liblist -a $(LIBLIST);\
 	system -ks "CRTSQLRPGI OBJ($(BIN_LIB)/$@) SRCSTMF('$<') $(SCFLAGS)"
 	
-OBJECTS = concrt condlt condltall conget congetall
+OBJECTS = concrt condlt condltall condown conget congetall conup
 
 all: clean compile 
 
@@ -56,7 +56,9 @@ purge: clean
 	-system "DLTPGM $(BIN_LIB)/CONCRT"
 	-system "DLTPGM $(BIN_LIB)/CONDLT"
 	-system "DLTPGM $(BIN_LIB)/CONDLTALL"
+	-system "DLTPGM $(BIN_LIB)/CONDOWN"
 	-system "DLTPGM $(BIN_LIB)/CONGET"
 	-system "DLTPGM $(BIN_LIB)/CONGETALL"
+	-system "DLTPGM $(BIN_LIB)/CONUP"
 
 .PHONY: install purge

@@ -1,9 +1,9 @@
-**FREE
+**free
 
 ctl-opt dftactgrp(*no) actgrp(*new) debug(*yes) bnddir('HTTPAPI') main(main);
 
 /include qrpglesrc,httpapi_h
-/include contact_d
+/include './contact_d.rpgleinc'
 
 dcl-ds contact_ids_t qualified;
   totalSize       int(10);
@@ -59,4 +59,4 @@ dcl-proc get_contact_ids;
   return contact_ids;
 end-proc;
 
-/include contact_p
+/include './contact_p.rpgleinc'

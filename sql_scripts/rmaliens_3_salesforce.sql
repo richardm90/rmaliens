@@ -54,3 +54,9 @@ CALL CONTACT_GET('003WU0000036mhxYAA', '');
 CALL CONTACT_DELETE('003WU0000036mhxYAA', '');
 STOP;
 
+-- Now let's download all contact rows from the Salesforce
+--   to a local DB2 for i table
+DELETE FROM CONTACT;
+CALL CONTACT_DOWNLOAD();
+SELECT * FROM CONTACT ORDER BY FIRSTNAME, LASTNAME ;
+STOP;

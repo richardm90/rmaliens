@@ -3,7 +3,7 @@
 ctl-opt dftactgrp(*no) actgrp(*new) debug(*yes) bnddir('HTTPAPI') main(main);
 
 /include qrpglesrc,httpapi_h
-/include contact_d
+/include './contact_d.rpgleinc'
 
 dcl-proc main;
   dcl-pi *n extpgm('CONDLT');
@@ -27,4 +27,4 @@ dcl-proc main;
   return;
 end-proc;
 
-/include contact_p
+/include './contact_p.rpgleinc'

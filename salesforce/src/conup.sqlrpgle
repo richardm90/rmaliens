@@ -1,18 +1,18 @@
-**FREE
+**free
 
 ctl-opt dftactgrp(*no) actgrp(*new) debug(*yes) main(main);
-ctl-opt bnddir('ILEVATOR');
-ctl-opt bnddir('NOXDB');
+ctl-opt bnddir('HTTPAPI');
+ctl-opt bnddir('YAJL');
 
-/include qrpgleref,noxdb
-/include qrpgleref,ilevator
-/include person_d
+/include qrpglesrc,httpapi_h
+/include qrpglesrc,yajl_h
+/include './contact_d.rpgleinc'
 
 dcl-proc main;
   dcl-pi *n extpgm('UPLOAD') end-pi;
 
   dcl-s num_rows uns(10);
-  dcl-ds people likeds(PERSON_t) dim(999);
+  dcl-ds contacts likeds(CONTACT_t) dim(999);
   dcl-s index uns(5);
 
   exec sql
@@ -23,19 +23,19 @@ dcl-proc main;
                   closqlcsr= *endactgrp,
                   naming = *sys;
 
-  ibmi_get_all_people(people: num_rows);
+  ibmi_get_all_contacts(contacts: num_rows);
 
-  // Loop through people
+  // Loop through contacts
   for index = 1 to num_rows;
-    PERCRT(people(index).firstName: people(index).lastName);
+    CONCRT(contacts(index).firstName: contacts(index).lastName);
   endfor;
 
   return;
 end-proc;
 
-dcl-proc ibmi_get_all_people;
+dcl-proc ibmi_get_all_contacts;
   dcl-pi *n;
-    person likeds(PERSON_t) dim(999);
+    contact likeds(CONTACT_t) dim(999);
     got_rows uns(10);
   end-pi;
 
@@ -50,7 +50,7 @@ dcl-proc ibmi_get_all_people;
       'FIRSTNAME , ' +
       'LASTNAME ' +
     'FROM ' +
-      'PERSON ' +
+      'CONTACT ' +
     'ORDER BY ' +
       'ID ' +
     'FOR READ ONLY';
@@ -68,11 +68,11 @@ dcl-proc ibmi_get_all_people;
     get diagnostics :total_rows = DB2_NUMBER_ROWS;
 
   row_offset = 1;
-  page_size = %elem(person);
+  page_size = %elem(contact);
 
   exec SQL
     fetch relative :row_offset from get_all_cursor
-      for :page_size rows into :person;
+      for :page_size rows into :contact;
 
   got_rows = SQLERRD(3);
 

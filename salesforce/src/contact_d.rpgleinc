@@ -9,6 +9,7 @@ dcl-c SF_QUERY_PATH   '/services/data/v52.0/query';
 // - either direct from RPG or via Node
 dcl-c SF_MODE_DIRECT  'direct';
 dcl-c SF_MODE_NODEJS  'nodejs';
+
 dcl-ds SF_CONFIG_t qualified template inz;
   base_url        varchar(1024);
   client_id       varchar(128);
@@ -32,6 +33,22 @@ dcl-s SF_ID_t         varchar(18) template;
 dcl-s SF_FIRSTNAME_t  varchar(40) template;
 dcl-s SF_LASTNAME_t   varchar(80) template;
 dcl-s SF_QUERY_t      varchar(1024) template;
+
+dcl-ds CONTACT_t qualified template inz;
+    id varchar(18)  inz('');
+    firstName varchar(255) ccsid(1208) inz('');
+    lastName varchar(255) ccsid(1208) inz('');
+end-ds;
+
+dcl-pr CONGETALL extpgm('CONGETALL');
+  result  like(SF_BUFFER_t) ccsid(1208) options(*nopass);
+end-pr;
+
+dcl-pr CONCRT extpgm('CONCRT');
+  firstName varchar(255)      ccsid(1208) const;
+  lastName  varchar(255)      ccsid(1208) const;
+  result    like(SF_BUFFER_t) ccsid(1208) options(*nopass);
+end-pr;
 
 // Global Salesforce login structure
 // - this is populated within sf_inz()

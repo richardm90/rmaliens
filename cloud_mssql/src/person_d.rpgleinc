@@ -11,7 +11,7 @@ dcl-pr PERCRT extpgm('PERCRT');
 end-pr;
 
 dcl-ds PERSON_t qualified template inz;
-    id int(10) inz(0);
-    firstName varchar(255) ccsid(1208) inz('');
-    lastName varchar(255) ccsid(1208) inz('');
+  id int(10) inz(0);
+  firstName varchar(255) ccsid(1208) inz('');
+  lastName varchar(255) ccsid(1208) inz('');
 end-ds;

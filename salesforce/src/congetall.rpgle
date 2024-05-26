@@ -1,9 +1,9 @@
-**FREE
+**free
 
 ctl-opt dftactgrp(*no) actgrp(*new) debug(*yes) bnddir('HTTPAPI') main(main);
 
 /include qrpglesrc,httpapi_h
-/include contact_d
+/include './contact_d.rpgleinc'
 
 dcl-ds contacts_t qualified;
   num_records     int(10);
@@ -29,8 +29,12 @@ dcl-proc main;
 
   url = sf_inz(*omit: query);
 
+  snd-msg url;
+
   // Get the contacts
   res = web_req('GET': url);
+
+  snd-msg res;
 
   // Return the response
   if %passed(result);
@@ -60,4 +64,4 @@ dcl-proc format_response;
   return res_out;
 end-proc;
 
-/include contact_p
+/include './contact_p.rpgleinc'

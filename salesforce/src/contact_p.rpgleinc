@@ -1,5 +1,20 @@
 **free
 
+///
+// Initialize Saleforce API.
+//
+// The `RMALIENS_SF_MODE` environment variable should be set prior to
+// calling this procedure.
+//
+// In `direct` mode a Salesforce login will be performed.
+//
+// @param The Salesforce id, used to build the returned URL.
+//        This is valid for both `direct` and `nodejs` modes.
+// @param The Salesforce query string, used to build the returned URL.
+//        This is only valid for `direct` mode.
+// @return The Salesforce URL.
+///
+
 dcl-proc sf_inz;
   dcl-pi *n varchar(1024);
     sf_id     like(SF_ID_t)     const options(*omit:*nopass);
@@ -28,7 +43,11 @@ dcl-proc sf_inz;
 
   when-is SF_MODE_NODEJS;
     // Set URL
-    if %passed(sf_id);
+    if %passed(sf_id) and %passed(sf_query);
+      url = sf_url(sf_id: sf_query);
+    elseif not %passed(sf_id) and %passed(sf_query);
+      url = sf_url(*omit: sf_query);
+    elseif %passed(sf_id);
       url = sf_url(sf_id);
     else;
       url = sf_url();
@@ -41,6 +60,18 @@ dcl-proc sf_inz;
 
   return url;
 end-proc;
+
+///
+// Generate a Saleforce URL.
+//
+// The `RMALIENS_SF_MODE` environment variable should be set prior.
+//
+// @param The Salesforce id, used to build the returned URL.
+//        This is valid for both `direct` and `nodejs` modes.
+// @param The Salesforce query string, used to build the returned URL.
+//        This is only valid for `direct` mode.
+// @return The Salesforce URL.
+///
 
 dcl-proc sf_url;
   dcl-pi *n varchar(1024);
@@ -72,6 +103,9 @@ dcl-proc sf_url;
     url = get_base_url() + '/contacts';
     if %passed(sf_id);
       url += '/' + sf_id;
+    endif;
+    if %passed(sf_query);
+      url += '?q=' + http_urlEncode(sf_query);
     endif;
 
   other;
@@ -195,11 +229,21 @@ dcl-proc parse_sf_login_response;
 end-proc;
 
 ///
-// Simple wrapper over 'http_req' that does pretty much the same thing
-// as 'http_string' but handles exceptions slightly differently. This 
+// Perform a HTTP web request.
+//
+// Simple wrapper over `http_req` that does pretty much the same thing
+// as `http_string` but handles exceptions slightly differently. This 
 // procedure includes the HTTPAPI return code, error message and response
 // data in the exception message.
-/// 
+//
+// An escape message will be thrown if the web request fails.
+// 
+// @param HTTP method e.g. GET, POST, etc
+// @param The URL
+// @param Optional request body
+// @param Optional content type, defaults to `application/json`
+// @return The web request response message
+///
 
 dcl-proc web_req;
   dcl-pi *n varchar(100000);
