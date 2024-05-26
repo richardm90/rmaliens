@@ -17,7 +17,6 @@ dcl-proc main;
   url = sf_inz(id);
 
   // Get the contact
-  // TODO: is this going to return all fields?
   res = web_req('GET': url);
 
   // Return the response

@@ -34,7 +34,6 @@ dcl-proc main;
 
   // Return the response
   if %passed(result);
-    // result = res;
     result = format_response(res);
   endif;
 
