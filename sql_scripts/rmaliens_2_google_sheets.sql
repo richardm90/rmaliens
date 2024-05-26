@@ -41,8 +41,8 @@ CALL PERSON_GETALL('');
 STOP;
 
 -- You can also get and delete a specific person based on their Id
-CALL PERSON_GET(13, '');
-CALL PERSON_DELETE(13, '');
+CALL PERSON_GET(10, '');
+CALL PERSON_DELETE(10, '');
 STOP;
 
 -- How about we upload (to the spreadsheet) all of the Star Wars characters 

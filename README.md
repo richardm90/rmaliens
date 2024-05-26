@@ -199,7 +199,8 @@ Nodej.s Google Sheets web server below.
 ### Persons Sheet
 
 It's important that the Google Sheet is called `Persons` and it should contain a
-worksheet called `Characters`.
+worksheet called `Characters`. Row 1 should contain two column headings - column
+A must be called `firstName` and column B must be called `lastName`.
 
 
 ## Build the RMALIENS Library
