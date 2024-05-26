@@ -80,14 +80,9 @@ export default class Salesforce {
     // Execute the SOQL query to retrieve all Contact records
     const result = await this.conn.query(query);
 
-    console.log(result);
-
     await this.disconnect();
 
-    // const contacts = result.records.map(({Id, FirstName, LastName}) => ({Id, FirstName, LastName}));
-    const contacts = result;
-
-    return contacts;
+    return result;
   }
 
   async read(id) {
@@ -97,10 +92,7 @@ export default class Salesforce {
 
     await this.disconnect();
 
-    // const contact = {Id: result.Id, FirstName: result.FirstName, LastName: result.LastName};
-    const contact = result;
-
-    return contact;
+    return result;
   }
 
   async update(id, data) {
