@@ -196,9 +196,9 @@ I suggest using the recommended Service Account authentication method.
 The authentication details generated here will be needed when configuring the
 Nodej.s Google Sheets web server below.
 
-### Persons Sheet
+### People Sheet
 
-It's important that the Google Sheet is called `Persons` and it should contain a
+It's important that the Google Sheet is called `People` and it should contain a
 worksheet called `Characters`. Row 1 should contain two column headings - column
 A must be called `firstName` and column B must be called `lastName`.
 
