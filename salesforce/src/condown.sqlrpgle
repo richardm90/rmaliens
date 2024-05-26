@@ -41,9 +41,9 @@ dcl-proc main;
     index = 0;
     dow YAJL_array_loop(records: index: node);
       reset contact;
-      contact.id        = YAJL_get_string(YAJL_object_find(node: 'id'));
-      contact.firstName = YAJL_get_string(YAJL_object_find(node: 'firstName'));
-      contact.lastName  = YAJL_get_string(YAJL_object_find(node: 'lastName'));
+      contact.id        = YAJL_get_string(YAJL_object_find(node: 'Id'));
+      contact.firstName = YAJL_get_string(YAJL_object_find(node: 'FirstName'));
+      contact.lastName  = YAJL_get_string(YAJL_object_find(node: 'LastName'));
     
       ibmi_save_contact(contact);
     enddo;

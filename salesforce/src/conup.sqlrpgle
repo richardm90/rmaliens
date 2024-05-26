@@ -1,11 +1,7 @@
 **free
 
 ctl-opt dftactgrp(*no) actgrp(*new) debug(*yes) main(main);
-ctl-opt bnddir('HTTPAPI');
-ctl-opt bnddir('YAJL');
 
-/include qrpglesrc,httpapi_h
-/include qrpglesrc,yajl_h
 /include './contact_d.rpgleinc'
 
 dcl-proc main;
