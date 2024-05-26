@@ -38,26 +38,11 @@ The following open source packages are used.
 
 
 
-# TODO
-
-* Update to the latest versions of ILEvator and noxDB
-
-Before building the project you need to update a couple of source files with 
-the correct IP address and port for your IBM i server.
-
-* Update the IP address and port number in the `BASE_URL` constant in source
-file `/prj/rmaliens/cloud_mssql/src/person_d.rpgleinc`
-* Update the IP address and port number in the `HTTP_GET` statement in source
-file `/prj/rmaliens/cloud_mssql/sql/mssql_demo.sql`
-
-
-
 # Your IBM i
 
-In this project there are lots of references to `myibmi` both in this readme
-and witin the code. This is the name of your IBM i. If you add `myibmi` to
-your hosts file and point it to your IBM i IP address the instructions and code
-will work out of the box.
+In this project there are lots of references to `myibmi` in this readme. This
+is the name of your IBM i. If you add `myibmi` to your hosts file and point it
+to your IBM i IP address the instructions and code will work out of the box.
 
 
 
