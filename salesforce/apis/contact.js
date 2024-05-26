@@ -11,11 +11,10 @@ console.log(config);
 // Create Salesforce object
 const salesforce = new Salesforce(config);
 
-router.get('/', async (_, res) => {
+router.get('/', async (req, res) => {
   try {
-    console.log(req.params);
     // Return a list of contacts
-    const contacts = await salesforce.readAll();
+    const contacts = await salesforce.readAll(req.query.q);
     res.status(200).json(contacts);
   } catch (err) {
     res.status(500).json({ error: err?.message });
