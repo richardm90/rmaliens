@@ -1,4 +1,4 @@
-﻿-- Ensure the connection is using system naming
+﻿﻿-- Ensure the connection is using system naming
 -- Set the library list (not needed for user RMALIENS), which
 --   has the initial library list set by the job description.
 CL: CHGLIBL LIBL(RMALIENS ILEVATOR NOXDB LIBHTTP YAJL QGPL QTEMP);
@@ -10,13 +10,7 @@ CL: ADDENVVAR ENVVAR(RMALIENS_HOST) VALUE('localhost');
 CL: ADDENVVAR ENVVAR(RMALIENS_PORT) VALUE('3103');
 CL: ADDENVVAR ENVVAR(RMALIENS_SF_MODE) VALUE('nodejs');
 -- CL: CHGENVVAR ENVVAR(RMALIENS_SF_MODE) VALUE('direct');
--- CL: CHGENVVAR ENVVAR(RMALIENS_SF_MODE) VALUE('nodejs');
 STOP;
-
--- Remove previous environment variables ...
--- CL: RMVENVVAR ENVVAR(RMALIENS_HOST);
--- CL: RMVENVVAR ENVVAR(RMALIENS_PORT);
--- STOP;
 
 
 -- Let's start with an empty spreadsheet!
@@ -50,14 +44,16 @@ STOP ;
 CALL CONTACT_GETALL('');
 STOP;
 
--- You can also get and delete a specific contact based on their Id
-CALL CONTACT_GET('003WU0000036mhxYAA', '');
-CALL CONTACT_DELETE('003WU0000036mhxYAA', '');
+-- You can also get and delete a specific person based on their Id
+CALL CONTACT_CREATE('Mr', 'Blobby', '');
+CALL CONTACT_GET('003WU000003K2YbYAK', '');
+CALL CONTACT_DELETE('003WU000003K2YbYAK', '');
 STOP;
 
 -- Now let's download all contact rows from the Salesforce
 --   to a local DB2 for i table
 DELETE FROM CONTACT;
 CALL CONTACT_DOWNLOAD();
+-- CALL CONTACT_UPLOAD();
 SELECT * FROM CONTACT ORDER BY FIRSTNAME, LASTNAME ;
 STOP;
