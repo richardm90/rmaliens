@@ -29,12 +29,8 @@ dcl-proc main;
 
   url = sf_inz(*omit: query);
 
-  snd-msg url;
-
   // Get the contacts
   res = web_req('GET': url);
-
-  snd-msg res;
 
   // Return the response
   if %passed(result);
