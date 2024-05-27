@@ -1,4 +1,4 @@
-﻿﻿-- Ensure the connection is using system naming
+﻿-- Ensure the connection is using system naming
 -- Set the library list (not needed for user RMALIENS), which
 --   has the initial library list set by the job description.
 CL: CHGLIBL LIBL(RMALIENS ILEVATOR NOXDB LIBHTTP YAJL QGPL QTEMP);
@@ -45,9 +45,9 @@ CALL CONTACT_GETALL('');
 STOP;
 
 -- You can also get and delete a specific person based on their Id
-CALL CONTACT_CREATE('Mr', 'Blobby', '');
-CALL CONTACT_GET('003WU000003K2YbYAK', '');
-CALL CONTACT_DELETE('003WU000003K2YbYAK', '');
+CALL CONTACT_CREATE('Richard', 'Moulton', '');
+CALL CONTACT_GET('003WU000003LM5RYAW', '');
+CALL CONTACT_DELETE('003WU000003LM5RYAW', '');
 STOP;
 
 -- Now let's download all contact rows from the Salesforce

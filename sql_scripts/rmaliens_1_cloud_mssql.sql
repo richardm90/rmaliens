@@ -36,13 +36,14 @@ CALL PERSON_CREATE('Worf', '', '');
 STOP;
 
 -- Now let's get all person rows from the Cloud DB
+--   - not something you would do in production!!!
 CALL PERSON_GETALL('');
 STOP;
 
 -- You can also get and delete a specific person based on their Id
-CALL PERSON_CREATE('Mr', 'Blobby', '');
-CALL PERSON_GET(169, '');
-CALL PERSON_DELETE(169, '');
+CALL PERSON_CREATE('Richard', 'Moulton', '');
+CALL PERSON_GET(245, '');
+CALL PERSON_DELETE(245, '');
 STOP;
 
 -- Now let's download all person rows from the Cloud DB
