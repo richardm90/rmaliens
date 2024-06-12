@@ -77,9 +77,12 @@ export default class Salesforce {
   async readAll(query) {
     await this.connect();
 
-    // Execute the SOQL query to retrieve all Contact records
-    const result = await this.conn.query(query);
+    // If the query string isnt passed then force to all RMALIENS contacts!
+    const _query = query || 'SELECT Id, FirstName, LastName FROM Contact WHERE Department = \'RMALIENS\'';
 
+    // Execute the SOQL query to retrieve all Contact records
+    const result = await this.conn.query(_query);
+     
     await this.disconnect();
 
     return result;
