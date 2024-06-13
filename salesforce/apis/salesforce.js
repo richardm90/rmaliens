@@ -50,10 +50,10 @@ export default class Salesforce {
 
   async faker(opts) {
     let count = opts.count || 1;
-    let result = [];
+    let contacts = [];
 
-    for (let i = 0; i < count; i++) {  
-      const data = {
+    for (let i = 0; i < count; i++) {
+      const contact = {
         FirstName: faker.person.firstName(),
         LastName: faker.person.firstName(),
         Email: faker.internet.email(),
@@ -66,10 +66,10 @@ export default class Salesforce {
         Department: "RMALIENS",
       }
 
-      const contact = await this.create(data);
-
-      result.push(contact);
+      contacts.push(contact);
     }
+
+    const result = await this.create(contacts);
 
     return result;
   }
