@@ -1,8 +1,9 @@
 import sql from 'mssql';
+import { fakerDE as faker } from '@faker-js/faker';
 
 export default class Database {
   config = {};
-  poolconnection = null;
+  pool = null;
   connected = false;
 
   constructor(config) {
@@ -14,7 +15,7 @@ export default class Database {
     try {
       console.log(`Database connecting...${this.connected}`);
       if (this.connected === false) {
-        this.poolconnection = await sql.connect(this.config);
+        this.pool = await sql.connect(this.config);
         this.connected = true;
         console.log('Database connection successful');
       } else {
@@ -27,7 +28,7 @@ export default class Database {
 
   async disconnect() {
     try {
-      this.poolconnection.close();
+      this.pool.close();
       console.log('Database connection closed');
     } catch (error) {
       console.error(`Error closing database connection: ${error}`);
@@ -36,7 +37,7 @@ export default class Database {
 
   async executeQuery(query) {
     await this.connect();
-    const request = this.poolconnection.request();
+    const request = this.pool.request();
     const result = await request.query(query);
 
     return result.rowsAffected[0];
@@ -44,7 +45,7 @@ export default class Database {
 
   async create(data) {
     await this.connect();
-    const request = this.poolconnection.request();
+    const request = this.pool.request();
 
     request.input('firstName', sql.NVarChar(255), data.firstName);
     request.input('lastName', sql.NVarChar(255), data.lastName);
@@ -56,9 +57,27 @@ export default class Database {
     return result.rowsAffected[0];
   }
 
+  async faker(opts) {
+    let count = opts.count || 1;
+
+    await this.connect();
+
+    const table = new sql.Table('Person');
+    table.columns.add('firstName', sql.NVarChar(255), {nullable: true});
+    table.columns.add('lastName', sql.NVarChar(255), {nullable: true});
+    for (let i = 0; i < count; i++) {
+      table.rows.add(faker.person.firstName(), faker.person.lastName());
+    }
+
+    const request = new sql.Request(this.pool);
+    const result = await request.bulk(table);
+
+    return result;
+  }
+
   async readAll() {
     await this.connect();
-    const request = this.poolconnection.request();
+    const request = this.pool.request();
     const result = await request.query(`SELECT * FROM Person`);
 
     return result.recordsets[0];
@@ -67,7 +86,7 @@ export default class Database {
   async read(id) {
     await this.connect();
 
-    const request = this.poolconnection.request();
+    const request = this.pool.request();
     const result = await request
       .input('id', sql.Int, +id)
       .query(`SELECT * FROM Person WHERE id = @id`);
@@ -78,7 +97,7 @@ export default class Database {
   async update(id, data) {
     await this.connect();
 
-    const request = this.poolconnection.request();
+    const request = this.pool.request();
 
     request.input('id', sql.Int, +id);
     request.input('firstName', sql.NVarChar(255), data.firstName);
@@ -96,7 +115,7 @@ export default class Database {
 
     let result = null;
 
-    const request = this.poolconnection.request();
+    const request = this.pool.request();
 
     if (id) {
       const idAsNumber = Number(id);

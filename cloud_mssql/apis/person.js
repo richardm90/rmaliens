@@ -32,6 +32,17 @@ router.post('/', async (req, res) => {
   }
 });
 
+router.post('/faker', async (req, res) => {
+  try {
+    // Create one or more fake contacts
+    const opts = req.body;
+    const result = await database.faker(opts);
+    res.status(201).json({ result });
+  } catch (err) {
+    res.status(500).json({ error: err?.message });
+  }
+});
+
 router.delete('/', async (_, res) => {
   try {
     const rowsAffected = await database.delete();
