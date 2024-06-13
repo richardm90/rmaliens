@@ -3,7 +3,7 @@
 ctl-opt dftactgrp(*no) actgrp(*new) debug(*yes) bnddir('ILEVATOR') main(main);
 
 /include qrpgleref,ilevator
-/include person_d
+/include './person_d.rpgleinc'
 
 dcl-proc main;
   dcl-pi *n extpgm('PERGET');
@@ -27,4 +27,4 @@ dcl-proc main;
   return;
 end-proc;
 
-/include person_p
+/include './person_p.rpgleinc'

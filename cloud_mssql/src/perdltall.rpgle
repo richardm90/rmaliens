@@ -5,7 +5,7 @@ ctl-opt bnddir('ILEVATOR');
 ctl-opt bnddir('NOXDB');
 
 /include qrpgleref,ilevator
-/include person_d
+/include './person_d.rpgleinc'
 
 dcl-proc main;
   dcl-pi *n extpgm('PERDLTALL') end-pi;
@@ -20,4 +20,4 @@ dcl-proc main;
   return;
 end-proc;
 
-/include person_p
+/include './person_p.rpgleinc'

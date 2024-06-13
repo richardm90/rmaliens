@@ -6,7 +6,7 @@ ctl-opt bnddir('NOXDB');
 
 /include qrpgleref,noxdb
 /include qrpgleref,ilevator
-/include person_d
+/include './person_d.rpgleinc'
 
 dcl-proc main;
   dcl-pi *n extpgm('UPLOAD') end-pi;
