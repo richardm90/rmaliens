@@ -27,15 +27,6 @@
       ]
     },
     {
-      "name": "GNU Make - build current **TEMP** 🔨",
-      "command": "export HOME=/home/rmaliens; cd ./rmrunsql; /QOpenSys/pkgs/bin/gmake OPT=*EVENTF",
-      "environment": "pase",
-      "deployFirst": true,
-      "extensions": [
-        "GLOBAL"
-      ]
-    },
-    {
       "name": "GNU Make - install all 🔨",
       "command": "export HOME=/home/rmaliens; /QOpenSys/pkgs/bin/gmake install",
       "extensions": [
