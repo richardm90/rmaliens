@@ -1,5 +1,5 @@
 import jsforce  from 'jsforce';
-import { fakerDE as faker } from '@faker-js/faker';
+import { fakerEN_GB as faker } from '@faker-js/faker';
 
 export default class Salesforce {
   config = {};

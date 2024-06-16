@@ -1,5 +1,5 @@
 import sql from 'mssql';
-import { fakerDE as faker } from '@faker-js/faker';
+import { fakerEN_GB as faker } from '@faker-js/faker';
 
 export default class Database {
   config = {};
