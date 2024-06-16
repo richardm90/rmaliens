@@ -5,8 +5,8 @@ CL: CHGLIBL LIBL(RMALIENS ILEVATOR NOXDB QGPL QTEMP);
 STOP;
 
 -- First time through? Let's use the Cloud DB external data source ...
-CL: ADDENVVAR ENVVAR(RMALIENS_HOST) VALUE('localhost');
-CL: ADDENVVAR ENVVAR(RMALIENS_PORT) VALUE('3101');
+CL: ADDENVVAR ENVVAR(RMALIENS_HOST) VALUE('localhost') REPLACE(*YES) ;
+CL: ADDENVVAR ENVVAR(RMALIENS_PORT) VALUE('3101') REPLACE(*YES) ;
 STOP;
 
 -- Let's start by deleting all rows from the Cloud Person DB
@@ -42,8 +42,8 @@ STOP;
 
 -- You can also get and delete a specific person based on their Id
 CALL PERSON_CREATE('Richard', 'Moulton', '');
-CALL PERSON_GET(245, '');
-CALL PERSON_DELETE(245, '');
+CALL PERSON_GET(2619, '');
+CALL PERSON_DELETE(2619, '');
 STOP;
 
 -- Now let's download all person rows from the Cloud DB

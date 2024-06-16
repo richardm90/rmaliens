@@ -6,14 +6,14 @@ STOP;
 
 -- -----------------------------------------------------------------------------
 -- Use the Salesforce external data source ...
-CL: ADDENVVAR ENVVAR(RMALIENS_HOST) VALUE('localhost');
-CL: ADDENVVAR ENVVAR(RMALIENS_PORT) VALUE('3103');
-CL: ADDENVVAR ENVVAR(RMALIENS_SF_MODE) VALUE('nodejs');
--- CL: CHGENVVAR ENVVAR(RMALIENS_SF_MODE) VALUE('direct');
+CL: ADDENVVAR ENVVAR(RMALIENS_HOST) VALUE('localhost') REPLACE(*YES) ;
+CL: ADDENVVAR ENVVAR(RMALIENS_PORT) VALUE('3103') REPLACE(*YES) ;
+-- CL: ADDENVVAR ENVVAR(RMALIENS_SF_MODE) VALUE('nodejs') REPLACE(*YES) ;
+CL: ADDENVVAR ENVVAR(RMALIENS_SF_MODE) VALUE('direct') REPLACE(*YES) ;
 STOP;
 
 
--- Let's start with an empty spreadsheet!
+-- Let's start with an empty contact list!
 CALL CONTACT_DELETEALL();
 STOP;
 
@@ -46,8 +46,8 @@ STOP;
 
 -- You can also get and delete a specific person based on their Id
 CALL CONTACT_CREATE('Richard', 'Moulton', '');
-CALL CONTACT_GET('003WU000003LM5RYAW', '');
-CALL CONTACT_DELETE('003WU000003LM5RYAW', '');
+CALL CONTACT_GET('003WU000003fDE5YAM', '');
+CALL CONTACT_DELETE('003WU000003fDE5YAM', '');
 STOP;
 
 -- Now let's download all contact rows from the Salesforce

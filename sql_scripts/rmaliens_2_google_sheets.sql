@@ -6,8 +6,8 @@ STOP;
 
 -- -----------------------------------------------------------------------------
 -- Use the Google Sheet external data source ...
-CL: CHGENVVAR ENVVAR(RMALIENS_HOST) VALUE('localhost');
-CL: CHGENVVAR ENVVAR(RMALIENS_PORT) VALUE('3102');
+CL: ADDENVVAR ENVVAR(RMALIENS_HOST) VALUE('localhost') REPLACE(*YES) ;
+CL: ADDENVVAR ENVVAR(RMALIENS_PORT) VALUE('3102') REPLACE(*YES) ;
 STOP;
 
 -- Let's start with an empty spreadsheet!
